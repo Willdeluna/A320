@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 36 Pneumatics Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+      --heat: #ff6b35;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(255,107,53,0.24), transparent 30%),
+        radial-gradient(circle at 88% 18%, rgba(255,159,28,0.22), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(98,216,255,0.09), transparent 36%),
+        linear-gradient(135deg, #000, #070707 45%, #190b04);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,107,53,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(255,107,53,.18);
+    }
+
+    .subtitle {
+      max-width: 940px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,107,53,.10), rgba(0,0,0,.74));
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 142px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(255,107,53,.20), 0 0 24px rgba(255,159,28,.16);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(255,159,28,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.1rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.15rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; font-size: .95rem; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .master-flow {
+      margin-bottom: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,107,53,.12), rgba(0,0,0,.72));
+    }
+
+    .master-flow h2 {
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .flow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      flex: 1 1 155px;
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(0,0,0,.55);
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .flow-step:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(255,107,53,.17);
+    }
+
+    .flow-step strong {
+      color: var(--amber);
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .flow-step span {
+      color: #ead9b8;
+      display: block;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .three-pack {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .pack-card {
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.68);
+      border-radius: 22px;
+      padding: 18px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .pack-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 0 28px rgba(255,159,28,.20);
+    }
+
+    .pack-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+
+    .pack-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.7;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--heat), var(--orange), var(--blue), transparent);
+      opacity: .82;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(255,107,53,.28), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(255,107,53,.035));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.17), rgba(255,107,53,.10));
+      box-shadow: 0 0 26px rgba(255,107,53,.18), 0 0 20px rgba(255,159,28,.15);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .danger-box {
+      border: 1px solid rgba(255,95,86,.65);
+      background: linear-gradient(135deg, rgba(255,95,86,.13), rgba(0,0,0,.72));
+    }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(255,107,53,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.1rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.6;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    .fail-chip small {
+      display: block;
+      margin-top: 5px;
+      color: #ffc8c4;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 1000px) {
+      .section-grid, .three-pack { grid-template-columns: 1fr; }
+      .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .fail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .hero-strip, .map-grid, .fail-list { grid-template-columns: 1fr; }
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .system-section, .memory-map, .master-flow, .pack-card { border-radius: 18px; padding: 14px; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 36 • Pneumatics / Bleed Air</div>
+    <h1>Bleed Air Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for engine/APU bleed sources, PRV/HPV/OPV logic, BMC control, precoolers, fan air valves, crossbleed operation, leak detection, ECAM BLEED clues, and protective shutdown troubleshooting.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card">
+      <div class="hero-icon">🔥</div>
+      <div class="hero-title">High-Energy Air</div>
+      <div class="hero-text">Bleed air is hot, high-pressure air that must be regulated, cooled, and protected.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🛫</div>
+      <div class="hero-title">Sources</div>
+      <div class="hero-text">Engine bleed, APU bleed, and ground air provide flexibility and redundancy.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🎛️</div>
+      <div class="hero-title">Control</div>
+      <div class="hero-text">PRVs, HPVs, crossbleed valves, and BMC logic control where air goes.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🌡️</div>
+      <div class="hero-title">Condition</div>
+      <div class="hero-text">Precoolers and FAVs cool hot bleed air before it reaches user systems.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🛡️</div>
+      <div class="hero-title">Protect</div>
+      <div class="hero-text">Leak detection, overtemp, and overpressure logic can shut the system down.</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="master-flow">
+      <h2>🧠 ATA 36 Master Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>Air Source</strong><span>Engine IP/HP, APU bleed, or ground HP air.</span></div>
+        <div class="flow-step"><strong>Regulate</strong><span>PRV and HPV control pressure and source selection.</span></div>
+        <div class="flow-step"><strong>Cool</strong><span>Precooler and FAV reduce bleed temperature.</span></div>
+        <div class="flow-step"><strong>Distribute</strong><span>Ducts and crossbleed route air to users.</span></div>
+        <div class="flow-step"><strong>Protect</strong><span>BMC, sensors, and leak loops shut down unsafe conditions.</span></div>
+      </div>
+    </section>
+
+    <section class="three-pack">
+      <div class="pack-card">
+        <div class="pack-title">🛫 Sources</div>
+        <ul>
+          <li>Engine bleed is primary in flight.</li>
+          <li>APU bleed supports ground and backup use.</li>
+          <li>Ground air connects through external HP supply.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">🎛️ Control</div>
+        <ul>
+          <li>PRV is the main control valve.</li>
+          <li>BMC is the bleed system brain.</li>
+          <li>Crossbleed connects left and right sides.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">🛡️ Protection</div>
+        <ul>
+          <li>Overtemp and overpressure close valves.</li>
+          <li>Leak detection shuts down affected systems.</li>
+          <li>Many faults are intentional protective shutdowns.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section-grid">
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Core Concept</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">ATA 36 is controlled high-energy air</span><span class="real-world"><span class="arrow">→</span>It takes hot, high-pressure air and delivers controlled air to aircraft systems.</span><span class="tag">big idea</span></div>
+          <div class="idea-card"><span class="main-idea">Not just air supply</span><span class="real-world"><span class="arrow">→</span>It is air control, pressure regulation, temperature conditioning, distribution, and protection.</span></div>
+          <div class="idea-card"><span class="main-idea">Bleed failure affects multiple ATA systems</span><span class="real-world"><span class="arrow">→</span>Packs, anti-ice, engine start, hydraulic reservoir pressurization, and water systems can all be affected.</span><span class="tag">system of systems</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧩</div><h2>System Architecture</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Basic flow</span><span class="real-world"><span class="arrow">→</span>Engine/APU → bleed system → crossbleed → user systems.</span></div>
+          <div class="idea-card"><span class="main-idea">User systems</span><span class="real-world"><span class="arrow">→</span>ATA 21 packs, ATA 30 wing anti-ice, engine start, reservoirs, and water pressurization.</span></div>
+          <div class="idea-card"><span class="main-idea">Source, valve, condition, protection, data</span><span class="real-world"><span class="arrow">→</span>That is the line-maintenance map for troubleshooting bleed faults.</span><span class="tag">MX map</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛫</div><h2>Bleed Air Sources</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Engine bleed is primary in flight</span><span class="real-world"><span class="arrow">→</span>Normal engine bleed uses IP stage air, with HP stage backup when demand requires it.</span></div>
+          <div class="idea-card"><span class="main-idea">APU bleed supports ground and backup use</span><span class="real-world"><span class="arrow">→</span>APU bleed can supply pneumatic users under approved operating conditions.</span></div>
+          <div class="idea-card"><span class="main-idea">Ground air uses external HP connection</span><span class="real-world"><span class="arrow">→</span>External pneumatic supply can support ground operations.</span></div>
+          <div class="idea-card"><span class="main-idea">Multiple sources add flexibility</span><span class="real-world"><span class="arrow">→</span>The aircraft can use different sources depending on phase, demand, and availability.</span><span class="tag">redundancy</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔁</div><h2>Engine Bleed Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">IP stage is normal</span><span class="real-world"><span class="arrow">→</span>At normal power, bleed air comes from the intermediate pressure stage.</span></div>
+          <div class="idea-card"><span class="main-idea">HP stage backs up low-power demand</span><span class="real-world"><span class="arrow">→</span>When IP pressure is not enough, the system can automatically use the HP stage.</span></div>
+          <div class="idea-card"><span class="main-idea">HPV controls source switching</span><span class="real-world"><span class="arrow">→</span>The high-pressure valve opens or closes based on pressure demand and engine condition.</span><span class="tag">automatic</span></div>
+          <div class="idea-card"><span class="main-idea">Don’t manually troubleshoot automatic source changes</span><span class="real-world"><span class="arrow">→</span>Understand the auto logic before calling it a fault.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🎛️</div><h2>PRV — Main Control Valve</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Most important valve</span><span class="real-world"><span class="arrow">→</span>The pressure regulating valve regulates bleed pressure and acts as a shutoff valve.</span><span class="tag">PRV = king</span></div>
+          <div class="idea-card"><span class="main-idea">Regulates usable pressure</span><span class="real-world"><span class="arrow">→</span>It keeps bleed pressure controlled before air goes downstream.</span></div>
+          <div class="idea-card"><span class="main-idea">Closes for protection</span><span class="real-world"><span class="arrow">→</span>Overtemp, overpressure, leak detection, engine fire, or starter logic can close the PRV.</span></div>
+          <div class="idea-card"><span class="main-idea">A closed PRV may be intentional</span><span class="real-world"><span class="arrow">→</span>Many bleed “failures” are the system protecting itself.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚙️</div><h2>HPV / IPC / OPV</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">HPV selects high-pressure air</span><span class="real-world"><span class="arrow">→</span>Opens at low engine power when IP air is not enough, and closes at higher power.</span></div>
+          <div class="idea-card"><span class="main-idea">IPC prevents reverse flow</span><span class="real-world"><span class="arrow">→</span>The intermediate pressure check valve prevents HP air from feeding back into the IP system.</span></div>
+          <div class="idea-card"><span class="main-idea">OPV is last pressure protection</span><span class="real-world"><span class="arrow">→</span>The overpressure valve protects the system if pressure goes too high.</span><span class="tag">last layer</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🌡️</div><h2>Temperature Control</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Bleed air is too hot for direct use</span><span class="real-world"><span class="arrow">→</span>It must be cooled before reaching many aircraft users.</span><span class="tag">must cool</span></div>
+          <div class="idea-card"><span class="main-idea">Precooler uses fan air</span><span class="real-world"><span class="arrow">→</span>Fan air flows through a heat exchanger to cool bleed air.</span></div>
+          <div class="idea-card"><span class="main-idea">FAV controls cooling airflow</span><span class="real-world"><span class="arrow">→</span>The fan air valve adjusts cooling flow based on temperature control logic.</span></div>
+          <div class="idea-card"><span class="main-idea">Temp faults can be cooling faults</span><span class="real-world"><span class="arrow">→</span>Don’t blame the source before checking precooler and FAV behavior.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>BMC — Bleed Monitoring Computer</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">BMC is the decision maker</span><span class="real-world"><span class="arrow">→</span>It controls valves, monitors pressure/temp, detects faults, and manages bleed logic.</span><span class="tag">system brain</span></div>
+          <div class="idea-card"><span class="main-idea">Two BMCs provide monitoring/control</span><span class="real-world"><span class="arrow">→</span>BMC 1 and BMC 2 manage their sides and share logic as needed.</span></div>
+          <div class="idea-card"><span class="main-idea">Inputs and outputs</span><span class="real-world"><span class="arrow">→</span>Inputs include sensors and valve feedback. Outputs include PRV commands, valve control, and ECAM data.</span></div>
+          <div class="idea-card"><span class="main-idea">Bad data can create bad decisions</span><span class="real-world"><span class="arrow">→</span>Sensor or signal faults can make the BMC shut down a healthy system.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📡</div><h2>Pressure & Temperature Monitoring</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Sensors feed BMC logic</span><span class="real-world"><span class="arrow">→</span>Pressure and temperature sensors send data to the BMC, then to SDAC/ECAM.</span></div>
+          <div class="idea-card"><span class="main-idea">RPT / TPT / temperature sensing</span><span class="real-world"><span class="arrow">→</span>Regulated pressure, transfer pressure, and temperature data help identify the fault type.</span></div>
+          <div class="idea-card"><span class="main-idea">Most faults are sensor or signal issues</span><span class="real-world"><span class="arrow">→</span>Always compare indication with actual valve/source behavior.</span><span class="tag">data matters</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚡</div><h2>APU Bleed System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">APU bleed can supply the pneumatic system</span><span class="real-world"><span class="arrow">→</span>Used mainly for ground operation and backup pneumatic supply.</span></div>
+          <div class="idea-card"><span class="main-idea">Only one source normally supplies at a time</span><span class="real-world"><span class="arrow">→</span>When APU bleed is selected, system logic prevents source conflicts.</span><span class="tag">source priority</span></div>
+          <div class="idea-card"><span class="main-idea">ECB and BMC are involved</span><span class="real-world"><span class="arrow">→</span>APU bleed valve control involves APU control and bleed monitoring logic.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔀</div><h2>Crossbleed System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Connects left and right pneumatic systems</span><span class="real-world"><span class="arrow">→</span>Allows one source to feed both sides or support engine start/cross-supply.</span></div>
+          <div class="idea-card"><span class="main-idea">AUTO mode supports APU bleed logic</span><span class="real-world"><span class="arrow">→</span>Crossbleed can open automatically when APU bleed logic requires it.</span></div>
+          <div class="idea-card"><span class="main-idea">Manual OPEN gives flexibility</span><span class="real-world"><span class="arrow">→</span>Used for cross-supply, engine start, or abnormal configurations.</span></div>
+          <div class="idea-card"><span class="main-idea">SHUT isolates systems</span><span class="real-world"><span class="arrow">→</span>Isolation can protect or separate sides during faults.</span><span class="tag">flexibility</span></div>
+        </div>
+      </div>
+
+      <div class="system-section danger-box">
+        <div class="section-head"><div class="section-icon">🚨</div><h2>Leak Detection</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Detects overheat from bleed leaks</span><span class="real-world"><span class="arrow">→</span>Leak detection protects wings, pylons, fuselage zones, and pneumatic ducts.</span><span class="tag">safety critical</span></div>
+          <div class="idea-card"><span class="main-idea">Dual loop logic reduces false alarms</span><span class="real-world"><span class="arrow">→</span>Two loops can confirm a leak with AND logic; one loop may mean degraded detection.</span></div>
+          <div class="idea-card"><span class="main-idea">Leak detection is protection, not convenience</span><span class="real-world"><span class="arrow">→</span>Do not override or ignore leak logic casually.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section danger-box">
+        <div class="section-head"><div class="section-icon">🛡️</div><h2>Leak Protection Actions</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">System shuts itself down</span><span class="real-world"><span class="arrow">→</span>Leak detection can close PRV, crossbleed, APU bleed, and shut wing anti-ice.</span><span class="tag">extremely important</span></div>
+          <div class="idea-card"><span class="main-idea">Protection logic can look like failure</span><span class="real-world"><span class="arrow">→</span>If bleed disappears, ask what commanded it off before replacing hardware.</span></div>
+          <div class="idea-card"><span class="main-idea">Find the cause of shutdown</span><span class="real-world"><span class="arrow">→</span>Overtemp, overpressure, or leak logic may be the real root cause.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📊</div><h2>ECAM BLEED Page</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Primary troubleshooting reference</span><span class="real-world"><span class="arrow">→</span>ECAM BLEED shows pressure, temperature, valve positions, and abnormal indications.</span><span class="tag">start here</span></div>
+          <div class="idea-card"><span class="main-idea">Color and symbols matter</span><span class="real-world"><span class="arrow">→</span>Green is normal, amber is abnormal, and invalid data can show as missing/XX logic.</span></div>
+          <div class="idea-card"><span class="main-idea">Use it with BMC/CFDS thinking</span><span class="real-world"><span class="arrow">→</span>ECAM shows what the system believes. CFDS/history helps explain why.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section wide">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>Common Failures & Line Reality</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Common faults</span><span class="real-world"><span class="arrow">→</span>PRV failure, HPV actuator issues, temperature sensors, pressure transducers, BMC logic, and leak detection loops.</span></div>
+          <div class="idea-card"><span class="main-idea">Actual duct rupture is less common</span><span class="real-world"><span class="arrow">→</span>Many faults are sensor, control, or protection logic issues before true physical duct failure.</span></div>
+          <div class="idea-card"><span class="main-idea">Many failures are protective shutdowns</span><span class="real-world"><span class="arrow">→</span>Always ask if the system was shut off intentionally by logic.</span><span class="tag">line MX gold</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="master-flow" style="margin-top:20px;">
+      <h2>🔧 Pro Troubleshooting Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>1. ECAM BLEED</strong><span>Check pressure, temp, valve position, and abnormal colors.</span></div>
+        <div class="flow-step"><strong>2. Identify</strong><span>Pressure issue, temperature issue, valve issue, or leak/protection.</span></div>
+        <div class="flow-step"><strong>3. Source</strong><span>Engine bleed, APU bleed, or ground air.</span></div>
+        <div class="flow-step"><strong>4. Control</strong><span>PRV, HPV, FAV, crossbleed, and BMC commands.</span></div>
+        <div class="flow-step"><strong>5. Protection</strong><span>Leak loops, overtemp, overpressure, engine fire, starter logic.</span></div>
+        <div class="flow-step"><strong>6. Data</strong><span>RPT, TPT, temp sensors, valve feedback, and CFDS history.</span></div>
+      </div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Master Simplified Model</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Air Supply</div><ul><li>Engine/APU</li><li>PRV</li><li>Duct</li><li>User system</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Protection</div><ul><li>Sensor</li><li>BMC</li><li>Valve closure</li><li>Shutdown logic</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Cooling</div><ul><li>Hot bleed air</li><li>Precooler</li><li>FAV</li><li>Regulated temp</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Final Most Important Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">PRV<small>most important valve</small></div>
+        <div class="fail-chip">BMC<small>controls logic</small></div>
+        <div class="fail-chip">IP/HP<small>automatic switching</small></div>
+        <div class="fail-chip">Cooling<small>bleed air is too hot</small></div>
+        <div class="fail-chip">Leak system<small>auto protection</small></div>
+        <div class="fail-chip">Crossbleed<small>flexibility</small></div>
+        <div class="fail-chip">Most faults<small>sensor or logic</small></div>
+        <div class="fail-chip">ECAM BLEED<small>primary tool</small></div>
+        <div class="fail-chip">Shutdown<small>may be intentional</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    A320 ATA 36 quick-study page • Pneumatic sources, PRV/BMC control, bleed cooling, crossbleed, leak protection, ECAM BLEED indications, and line-maintenance troubleshooting flow.
+  </footer>
+</body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 28 Fuel System Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(255,159,28,0.25), transparent 30%),
+        radial-gradient(circle at 90% 18%, rgba(98,216,255,0.15), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(140,255,177,0.08), transparent 35%),
+        linear-gradient(135deg, #000, #080808 45%, #130b02);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,159,28,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(255,159,28,.16);
+    }
+
+    .subtitle {
+      max-width: 880px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 142px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(255,159,28,.24);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(255,159,28,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.2rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.22rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--orange), var(--blue), transparent);
+      opacity: .75;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(255,159,28,.28), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(255,255,255,.02));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.18), rgba(98,216,255,.06));
+      box-shadow: 0 0 26px rgba(255,159,28,.21);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(98,216,255,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.2rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.65;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    .fail-chip small {
+      display: block;
+      margin-top: 5px;
+      color: #ffc8c4;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 1000px) {
+      .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .section-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .hero-strip, .map-grid, .fail-list { grid-template-columns: 1fr; }
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .system-section, .memory-map { border-radius: 18px; padding: 14px; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 28 • Fuel System</div>
+    <h1>Fuel System Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A clean quick-study page for tank logic, pumps, crossfeed, refuel/defuel, venting, FQIS, transfer logic, fuel cooling, CDCCL, and the troubleshooting traps that cause repeat write-ups.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card">
+      <div class="hero-icon">⛽</div>
+      <div class="hero-title">Store</div>
+      <div class="hero-text">Fuel lives in the wing and center tanks, with vent protection keeping structure safe.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🔄</div>
+      <div class="hero-title">Move</div>
+      <div class="hero-text">Pumps, valves, crossfeed, and transfer logic move fuel where the aircraft needs it.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">📟</div>
+      <div class="hero-title">Control</div>
+      <div class="hero-text">Sensors, FQIC/FLSCU logic, and indications tell the crew and MX what is happening.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🧯</div>
+      <div class="hero-title">Protect</div>
+      <div class="hero-text">Vent systems, overflow protection, temp logic, and CDCCL rules prevent nasty surprises.</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="section-grid">
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Big Picture — How It Works</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Three main tanks</span><span class="real-world"><span class="arrow">→</span>Left, right, and center tanks store fuel in the wings and center section.</span></div>
+          <div class="idea-card"><span class="main-idea">Three big jobs</span><span class="real-world"><span class="arrow">→</span>Store fuel, feed engines/APU, and manage distribution plus indication.</span></div>
+          <div class="idea-card"><span class="main-idea">Fuel also cools systems</span><span class="real-world"><span class="arrow">→</span>IDG oil cooling uses fuel, so fuel is not just engine food.</span><span class="tag">cooling role</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⛽</div><h2>Fuel Usage Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Center tank fuel is used first</span><span class="real-world"><span class="arrow">→</span>Higher pressure center pumps force center fuel to feed before wing fuel.</span><span class="tag">very important</span></div>
+          <div class="idea-card"><span class="main-idea">Then inner tanks, then outer tanks</span><span class="real-world"><span class="arrow">→</span>Normal burn sequence keeps the aircraft balanced and structurally happy.</span></div>
+          <div class="idea-card"><span class="main-idea">Outer fuel moves by gravity</span><span class="real-world"><span class="arrow">→</span>Outer tank fuel moves into the inner tank when inner fuel level gets low.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚙️</div><h2>Pumps & Feed System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Six main pumps total</span><span class="real-world"><span class="arrow">→</span>Two center pumps and two pumps in each wing supply engine feed.</span></div>
+          <div class="idea-card"><span class="main-idea">Any one pump can feed an engine</span><span class="real-world"><span class="arrow">→</span>Redundancy is built into the feed system.</span></div>
+          <div class="idea-card"><span class="main-idea">Wing tanks can suction feed</span><span class="real-world"><span class="arrow">→</span>If pumps fail, engines can suction feed from wing tanks as a backup.</span></div>
+          <div class="idea-card"><span class="main-idea">Center tank cannot suction feed</span><span class="real-world"><span class="arrow">→</span>Center fuel needs pump pressure. No pump, no useful center feed.</span><span class="tag">trap</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔄</div><h2>Crossfeed System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Crossfeed connects left and right sides</span><span class="real-world"><span class="arrow">→</span>It allows one tank side to feed both engines when needed.</span></div>
+          <div class="idea-card"><span class="main-idea">Normally closed</span><span class="real-world"><span class="arrow">→</span>Open it for imbalance, transfer, or failure scenarios.</span></div>
+          <div class="idea-card"><span class="main-idea">Manual control</span><span class="real-world"><span class="arrow">→</span>No magic auto logic. Pilot or MX action controls it.</span><span class="tag">watch imbalance</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛬</div><h2>Refuel / Defuel System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Pressure refueling is normal</span><span class="real-world"><span class="arrow">→</span>All tanks can be filled automatically from the fueling panel.</span></div>
+          <div class="idea-card"><span class="main-idea">Wing tanks first, then center</span><span class="real-world"><span class="arrow">→</span>This helps prevent wing stress during fueling.</span><span class="tag">structure logic</span></div>
+          <div class="idea-card"><span class="main-idea">Defueling uses pumps and crossfeed</span><span class="real-world"><span class="arrow">→</span>Correct valve setup matters more than guessing at components.</span></div>
+          <div class="idea-card"><span class="main-idea">Max refuel pressure about 50 psi</span><span class="real-world"><span class="arrow">→</span>Pressure limit protects the fuel tanks and structure.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🌬️</div><h2>Vent System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Equalizes tank pressure</span><span class="real-world"><span class="arrow">→</span>Prevents tank damage as fuel level, altitude, and pressure change.</span></div>
+          <div class="idea-card"><span class="main-idea">Vent surge tank catches overflow</span><span class="real-world"><span class="arrow">→</span>Helps prevent fuel spills and supports safe venting.</span></div>
+          <div class="idea-card"><span class="main-idea">Flame arrestor blocks ignition path</span><span class="real-world"><span class="arrow">→</span>Prevents outside fire from traveling into the tank through the vent system.</span><span class="tag">safety critical</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚠️</div><h2>CDCCL — Maintenance Big Deal</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Fuel wiring and components may be CDCCL</span><span class="real-world"><span class="arrow">→</span>Configuration, routing, clamps, bonding, and parts matter.</span></div>
+          <div class="idea-card"><span class="main-idea">Do not change protected configuration</span><span class="real-world"><span class="arrow">→</span>Wrong parts or routing can create ignition risk.</span><span class="tag">do not alter</span></div>
+          <div class="idea-card"><span class="main-idea">Treat violations as serious</span><span class="real-world"><span class="arrow">→</span>CDCCL mistakes can become explosion hazards, not just paperwork.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>Fuel Quantity System — FQIS</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Capacitance probes measure fuel</span><span class="real-world"><span class="arrow">→</span>Fuel level changes electrical signal, which becomes fuel quantity.</span></div>
+          <div class="idea-card"><span class="main-idea">FQIC calculates mass and density</span><span class="real-world"><span class="arrow">→</span>Uses probe, temperature, and density inputs.</span></div>
+          <div class="idea-card"><span class="main-idea">Dual channels A/B</span><span class="real-world"><span class="arrow">→</span>One channel can fail while the system still provides usable indication.</span><span class="tag">redundancy</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🌡️</div><h2>Sensors & Level Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">High-level sensors stop refueling</span><span class="real-world"><span class="arrow">→</span>Prevents overfill during pressure refueling.</span></div>
+          <div class="idea-card"><span class="main-idea">Low-level sensors trigger warnings and transfer logic</span><span class="real-world"><span class="arrow">→</span>They control movement and help protect the system.</span></div>
+          <div class="idea-card"><span class="main-idea">Overflow sensor shuts fuel return</span><span class="real-world"><span class="arrow">→</span>Prevents overfilling from returned fuel.</span></div>
+          <div class="idea-card"><span class="main-idea">Temperature sensors protect from overheating</span><span class="real-world"><span class="arrow">→</span>Can shut down recirculation when temperature logic says stop.</span><span class="tag">testable</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔁</div><h2>Fuel Transfer Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Center tank transfers to wings on some aircraft logic</span><span class="real-world"><span class="arrow">→</span>Some systems use jet pumps instead of directly feeding engines.</span></div>
+          <div class="idea-card"><span class="main-idea">Intercell valves open when inner tank gets low</span><span class="real-world"><span class="arrow">→</span>Gravity moves outer tank fuel into the inner tank.</span></div>
+          <div class="idea-card"><span class="main-idea">Valves latch open until next refuel</span><span class="real-world"><span class="arrow">→</span>Important behavior when troubleshooting transfer complaints.</span><span class="tag">MX clue</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔥</div><h2>Fuel Recirculation / Cooling</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Fuel cools IDG oil</span><span class="real-world"><span class="arrow">→</span>Heat is carried back to the wing tank through return flow.</span></div>
+          <div class="idea-card"><span class="main-idea">Fuel return valve controls return flow</span><span class="real-world"><span class="arrow">→</span>FRV logic decides when return fuel is allowed.</span></div>
+          <div class="idea-card"><span class="main-idea">FRV closes for protection</span><span class="real-world"><span class="arrow">→</span>High temp, low fuel, overflow, or low pressure can close the return path.</span><span class="tag">cooling logic</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔩</div><h2>Valves to Know</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">LP valve shuts fuel to engine/APU</span><span class="real-world"><span class="arrow">→</span>Activated by fire pushbutton logic or normal shutdown.</span></div>
+          <div class="idea-card"><span class="main-idea">Defuel / transfer valve connects to refuel gallery</span><span class="real-world"><span class="arrow">→</span>Used for transfer or defuel paths.</span></div>
+          <div class="idea-card"><span class="main-idea">Refuel valves open automatically or manually</span><span class="real-world"><span class="arrow">→</span>Behavior depends on system mode and level logic.</span><span class="tag">follow valve path</span></div>
+        </div>
+      </div>
+
+      <div class="system-section wide">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Monitoring & Indications</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Crew display shows the fuel picture</span><span class="real-world"><span class="arrow">→</span>Fuel quantity, temperature, valve positions, and pump status are the big items.</span></div>
+          <div class="idea-card"><span class="main-idea">Color logic matters</span><span class="real-world"><span class="arrow">→</span>Green normally means normal. Amber usually means fault, abnormal position, or caution.</span><span class="tag">read the display</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Easy Way to Remember ATA 28</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Store</div><ul><li>Wing tanks</li><li>Center tank</li><li>Vent protection</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Move</div><ul><li>Pumps</li><li>Valves</li><li>Crossfeed</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Control</div><ul><li>Sensors</li><li>FQIC</li><li>FLSCU</li></ul></div>
+        <div class="map-card"><div class="map-number">4</div><div class="map-title">Protect</div><ul><li>Vent system</li><li>Overflows</li><li>CDCCL</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Real Line MX Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">Sensor issues<small>more common than actual fuel loss</small></div>
+        <div class="fail-chip">Center logic<small>causes many repeat write-ups</small></div>
+        <div class="fail-chip">Crossfeed misuse<small>can create imbalance problems</small></div>
+        <div class="fail-chip">Low pressure<small>pump or supply path issue</small></div>
+        <div class="fail-chip">CDCCL violations<small>serious ignition risk</small></div>
+        <div class="fail-chip">Vent problems<small>leaks and odor complaints</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    A320 ATA 28 quick-study page • Fuel storage, movement, control, protection, and line-maintenance traps.
+  </footer>
+</body>
+</html>

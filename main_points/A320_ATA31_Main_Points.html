@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 31 Indicating & Recording Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+      --purple: #b58cff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(98,216,255,0.20), transparent 30%),
+        radial-gradient(circle at 88% 18%, rgba(255,159,28,0.20), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(181,140,255,0.10), transparent 36%),
+        linear-gradient(135deg, #000, #070707 45%, #10081a);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(98,216,255,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(98,216,255,.18);
+    }
+
+    .subtitle {
+      max-width: 940px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,159,28,.1), rgba(0,0,0,.74));
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 142px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(255,159,28,.22), 0 0 22px rgba(98,216,255,.14);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(98,216,255,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.1rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.15rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; font-size: .95rem; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .data-flow {
+      margin-bottom: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(98,216,255,.10), rgba(0,0,0,.72));
+    }
+
+    .data-flow h2 {
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .flow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      flex: 1 1 145px;
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(0,0,0,.55);
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .flow-step:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(98,216,255,.17);
+    }
+
+    .flow-step strong {
+      color: var(--amber);
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .flow-step span {
+      color: #ead9b8;
+      display: block;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--blue), var(--orange), var(--purple), transparent);
+      opacity: .82;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(98,216,255,.26), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(98,216,255,.035));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.17), rgba(98,216,255,.09));
+      box-shadow: 0 0 26px rgba(98,216,255,.18), 0 0 20px rgba(255,159,28,.15);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(98,216,255,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.1rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.6;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    .fail-chip small {
+      display: block;
+      margin-top: 5px;
+      color: #ffc8c4;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 1000px) {
+      .section-grid { grid-template-columns: 1fr; }
+      .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .fail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .hero-strip, .map-grid, .fail-list { grid-template-columns: 1fr; }
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .system-section, .memory-map, .data-flow { border-radius: 18px; padding: 14px; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 31 • Indicating & Recording</div>
+    <h1>Aircraft Information Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for EIS, EFIS, ECAM, DMCs, FWCs, SDACs, CFDS, failure classes, recorders, and the troubleshooting logic behind what pilots see and what maintenance uses.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card">
+      <div class="hero-icon">📡</div>
+      <div class="hero-title">Collect</div>
+      <div class="hero-text">Sensors and systems send aircraft data into the indicating and recording network.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🧠</div>
+      <div class="hero-title">Process</div>
+      <div class="hero-text">SDACs, DMCs, and FWCs turn raw system data into displays and warnings.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🖥️</div>
+      <div class="hero-title">Display</div>
+      <div class="hero-text">PFD, ND, EWD, and SD show flight data, navigation, engine data, and system pages.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🚨</div>
+      <div class="hero-title">Warn</div>
+      <div class="hero-text">FWCs and ECAM logic prioritize warnings, cautions, advisories, and procedures.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">📼</div>
+      <div class="hero-title">Record</div>
+      <div class="hero-text">CFDS, BITE, DFDR, CVR, and QAR data support maintenance and investigations.</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="data-flow">
+      <h2>🧠 ATA 31 Data Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>Sensors</strong><span>Aircraft systems create raw data.</span></div>
+        <div class="flow-step"><strong>SDAC</strong><span>System data gateway for display and warnings.</span></div>
+        <div class="flow-step"><strong>DMC / FWC</strong><span>Display processing and warning logic.</span></div>
+        <div class="flow-step"><strong>Displays</strong><span>PFD, ND, EWD, and SD.</span></div>
+        <div class="flow-step"><strong>CFDS</strong><span>Fault history and maintenance reports.</span></div>
+        <div class="flow-step"><strong>Recorders</strong><span>DFDR, CVR, QAR/DAR/WQAR.</span></div>
+      </div>
+    </section>
+
+    <section class="section-grid">
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Core Concept</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">ATA 31 is the aircraft information system</span><span class="real-world"><span class="arrow">→</span>It collects, processes, displays, warns, and records aircraft data.</span><span class="tag">big idea</span></div>
+          <div class="idea-card"><span class="main-idea">Pilots see it, maintenance uses it</span><span class="real-world"><span class="arrow">→</span>ATA 31 is what the crew relies on and what MX uses to trace faults.</span></div>
+          <div class="idea-card"><span class="main-idea">Front end of every system</span><span class="real-world"><span class="arrow">→</span>Hydraulics, fuel, electrical, bleed, flight controls — ATA 31 displays their story.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧩</div><h2>System Architecture</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Main subsystems</span><span class="real-world"><span class="arrow">→</span>EIS, ECAM, FWS, CFDS, and recorders.</span></div>
+          <div class="idea-card"><span class="main-idea">Data path matters</span><span class="real-world"><span class="arrow">→</span>Trace Sensor → SDAC → FWC/DMC → Display/CFDS/Recorder.</span><span class="tag">trace data</span></div>
+          <div class="idea-card"><span class="main-idea">Display messages are symptoms</span><span class="real-world"><span class="arrow">→</span>The message tells you where to start, not always what part failed.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🖥️</div><h2>EIS — Electronic Instrument System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Six display units</span><span class="real-world"><span class="arrow">→</span>Two PFDs, two NDs, and two ECAM displays.</span></div>
+          <div class="idea-card"><span class="main-idea">Displays are identical and interchangeable</span><span class="real-world"><span class="arrow">→</span>The aircraft can reconfigure critical information when a display fails.</span><span class="tag">reconfigurable</span></div>
+          <div class="idea-card"><span class="main-idea">EFIS vs ECAM</span><span class="real-world"><span class="arrow">→</span>EFIS is flying/navigation. ECAM is monitoring, warnings, and system status.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🎛️</div><h2>DMC — Display Management Computer</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Three DMCs total</span><span class="real-world"><span class="arrow">→</span>DMC 1 and 2 are primary. DMC 3 is the backup.</span></div>
+          <div class="idea-card"><span class="main-idea">DMC = display processor/driver</span><span class="real-world"><span class="arrow">→</span>It collects data, processes it, and sends display instructions.</span><span class="tag">display brain</span></div>
+          <div class="idea-card"><span class="main-idea">DMC 3 is the hot spare</span><span class="real-world"><span class="arrow">→</span>It can replace a failed display management path.</span></div>
+          <div class="idea-card"><span class="main-idea">Different failures look different</span><span class="real-world"><span class="arrow">→</span>DMC failure may show invalid input/diagonal lines. DU failure may be a blank screen.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔁</div><h2>Display Reconfiguration</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Automatic and manual switching</span><span class="real-world"><span class="arrow">→</span>The aircraft can move critical data to another screen.</span></div>
+          <div class="idea-card"><span class="main-idea">Upper ECAM can move to lower ECAM</span><span class="real-world"><span class="arrow">→</span>If one ECAM display fails, information is not automatically lost.</span></div>
+          <div class="idea-card"><span class="main-idea">ECAM can appear on ND if needed</span><span class="real-world"><span class="arrow">→</span>Critical information stays visible through reconfiguration.</span><span class="tag">no info loss</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🚨</div><h2>FWS — Flight Warning System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">FWC is the warning brain</span><span class="real-world"><span class="arrow">→</span>Two Flight Warning Computers monitor systems and generate warnings.</span><span class="tag">warning brain</span></div>
+          <div class="idea-card"><span class="main-idea">Provides aural and visual alerts</span><span class="real-world"><span class="arrow">→</span>Warnings, cautions, master lights, chimes, and CRC logic come from warning processing.</span></div>
+          <div class="idea-card"><span class="main-idea">Warning source matters</span><span class="real-world"><span class="arrow">→</span>Red warnings may come directly through FWC logic; amber cautions often use SDAC-fed data.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📡</div><h2>SDAC — System Data Gateway</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">SDAC collects system data</span><span class="real-world"><span class="arrow">→</span>It gathers aircraft system inputs and sends them to display and warning computers.</span></div>
+          <div class="idea-card"><span class="main-idea">Feeds DMC and FWC</span><span class="real-world"><span class="arrow">→</span>DMC uses data for displays. FWC uses data for warnings.</span></div>
+          <div class="idea-card"><span class="main-idea">Input mismatch can create confusing faults</span><span class="real-world"><span class="arrow">→</span>Sensor/data issues may show as system messages even when the component is fine.</span><span class="tag">MX trap</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📊</div><h2>ECAM System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Upper ECAM = EWD</span><span class="real-world"><span class="arrow">→</span>Shows engine parameters, fuel, flaps/slats, warnings, and messages.</span></div>
+          <div class="idea-card"><span class="main-idea">Lower ECAM = SD</span><span class="real-world"><span class="arrow">→</span>Shows system pages and status information.</span></div>
+          <div class="idea-card"><span class="main-idea">ECAM shows what you need</span><span class="real-world"><span class="arrow">→</span>Flight phase and failure logic determine what page appears automatically.</span><span class="tag">smart display</span></div>
+          <div class="idea-card"><span class="main-idea">SD is the troubleshooting picture</span><span class="real-world"><span class="arrow">→</span>HYD, ELEC, FUEL, BLEED, and other pages help visualize system condition.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚠️</div><h2>ECAM Warnings & Failure Types</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Level 3 warning</span><span class="real-world"><span class="arrow">→</span>Red warning, CRC, immediate action required.</span></div>
+          <div class="idea-card"><span class="main-idea">Level 2 caution</span><span class="real-world"><span class="arrow">→</span>Amber caution, single chime, crew awareness/action needed.</span></div>
+          <div class="idea-card"><span class="main-idea">Level 1 advisory</span><span class="real-world"><span class="arrow">→</span>Monitor condition with lower urgency.</span></div>
+          <div class="idea-card"><span class="main-idea">Primary failure comes first</span><span class="real-world"><span class="arrow">→</span>Independent, primary, and secondary failures can stack. Find the root cause first.</span><span class="tag">primary first</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🎚️</div><h2>ECAM Control Panel & STATUS</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">ECP controls ECAM pages</span><span class="real-world"><span class="arrow">→</span>CLR, STS, RCL, and system keys manage display and warning review.</span></div>
+          <div class="idea-card"><span class="main-idea">Pilot can override automatic display</span><span class="real-world"><span class="arrow">→</span>Manual system page selection helps verify system condition.</span></div>
+          <div class="idea-card"><span class="main-idea">STATUS page shows operational impact</span><span class="real-world"><span class="arrow">→</span>Limitations, procedures, aircraft condition, and maintenance messages can appear here.</span><span class="tag">impact page</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>CFDS — Maintenance System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Centralized Fault Display System</span><span class="real-world"><span class="arrow">→</span>CFDS collects fault and BITE data through the CFDIU.</span><span class="tag">MX tool</span></div>
+          <div class="idea-card"><span class="main-idea">NORMAL mode records faults</span><span class="real-world"><span class="arrow">→</span>Faults are automatically captured during operation.</span></div>
+          <div class="idea-card"><span class="main-idea">MENU mode supports ground testing</span><span class="real-world"><span class="arrow">→</span>Ground tests and system menus help isolate faults.</span></div>
+          <div class="idea-card"><span class="main-idea">History matters</span><span class="real-world"><span class="arrow">→</span>LAST LEG, LAST LEG ECAM, and PREVIOUS LEGS are gold for repeat write-ups.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧪</div><h2>BITE & Failure Classes</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">BITE is built-in self diagnosis</span><span class="real-world"><span class="arrow">→</span>Systems detect and store faults, then send data to CFDS.</span></div>
+          <div class="idea-card"><span class="main-idea">Class 1 faults are urgent</span><span class="real-world"><span class="arrow">→</span>Usually important in flight and require strong attention.</span></div>
+          <div class="idea-card"><span class="main-idea">Class 2 and 3 are maintenance/deferred focus</span><span class="real-world"><span class="arrow">→</span>Not every fault is urgent, but history helps determine the real pattern.</span><span class="tag">don’t overreact</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📼</div><h2>Recorders & Clock</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">DFDR records flight data</span><span class="real-world"><span class="arrow">→</span>Used for safety, investigation, and event review.</span></div>
+          <div class="idea-card"><span class="main-idea">CVR records cockpit audio</span><span class="real-world"><span class="arrow">→</span>Supports investigation and operational review.</span></div>
+          <div class="idea-card"><span class="main-idea">QAR/DAR/WQAR support trends</span><span class="real-world"><span class="arrow">→</span>Useful for maintenance monitoring and reliability programs.</span></div>
+          <div class="idea-card"><span class="main-idea">UTC clock ties the story together</span><span class="real-world"><span class="arrow">→</span>Time feeds CFDS, FMGC, and DFDR fault tracking.</span><span class="tag">timeline clue</span></div>
+        </div>
+      </div>
+
+      <div class="system-section wide">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>Maintenance Reality</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Most faults are data/interface issues</span><span class="real-world"><span class="arrow">→</span>Displays, DMC switching, sensor mismatches, SDAC issues, and reporting logic are common.</span></div>
+          <div class="idea-card"><span class="main-idea">Complete system failure is rare</span><span class="real-world"><span class="arrow">→</span>Usually you are chasing a path problem, not total aircraft information loss.</span></div>
+          <div class="idea-card"><span class="main-idea">Don’t stop at the message</span><span class="real-world"><span class="arrow">→</span>Trace the data source behind the ECAM or CFDS report.</span><span class="tag">line MX mindset</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="data-flow" style="margin-top:20px;">
+      <h2>🔧 Troubleshooting Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>1. Check ECAM</strong><span>Review EWD and SD messages.</span></div>
+        <div class="flow-step"><strong>2. Classify</strong><span>Warning level and failure type.</span></div>
+        <div class="flow-step"><strong>3. Check CFDS</strong><span>LAST LEG and LAST LEG ECAM.</span></div>
+        <div class="flow-step"><strong>4. Trace Data</strong><span>Sensor → SDAC → FWC/DMC → Display.</span></div>
+        <div class="flow-step"><strong>5. Find Primary</strong><span>Fix root cause, not downstream symptoms.</span></div>
+      </div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Easy Way to Remember ATA 31</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Collect Data</div><ul><li>Sensors</li><li>SDAC</li><li>System inputs</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Process Data</div><ul><li>DMC</li><li>FWC</li><li>Display/warning logic</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Display Data</div><ul><li>PFD / ND</li><li>EWD / SD</li><li>Reconfiguration</li></ul></div>
+        <div class="map-card"><div class="map-number">4</div><div class="map-title">Record Data</div><ul><li>CFDS</li><li>BITE</li><li>DFDR / CVR</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Real Line MX Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">ECAM<small>primary tool</small></div>
+        <div class="fail-chip">DMC 3<small>backup path</small></div>
+        <div class="fail-chip">FWC<small>warning brain</small></div>
+        <div class="fail-chip">SDAC<small>data gateway</small></div>
+        <div class="fail-chip">Primary fault<small>find root cause</small></div>
+        <div class="fail-chip">CFDS<small>history is gold</small></div>
+        <div class="fail-chip">ATA 31<small>touches every system</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    A320 ATA 31 quick-study page • EIS, ECAM, FWS, CFDS, display reconfiguration, recorders, and line-maintenance troubleshooting flow.
+  </footer>
+</body>
+</html>

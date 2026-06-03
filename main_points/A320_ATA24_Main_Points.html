@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 24 Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(255,159,28,0.24), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(98,216,255,0.14), transparent 26%),
+        linear-gradient(135deg, #000, #080808 45%, #140b02);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,159,28,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(255,159,28,.16);
+    }
+
+    .subtitle {
+      max-width: 860px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 140px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(255,159,28,.24);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(255,159,28,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.2rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.25rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--orange), var(--blue), transparent);
+      opacity: .75;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(255,159,28,.28), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(255,255,255,.02));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.18), rgba(98,216,255,.06));
+      box-shadow: 0 0 26px rgba(255,159,28,.21);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(98,216,255,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.2rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.65;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .section-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .hero-strip, .map-grid, .fail-list { grid-template-columns: 1fr; }
+      .system-section, .memory-map { border-radius: 18px; padding: 14px; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 24 • Electrical System</div>
+    <h1>Electrical Power Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for AC power, DC conversion, IDGs, external power, bus tie logic, batteries, emergency power, and troubleshooting flow.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card">
+      <div class="hero-icon">⚡</div>
+      <div class="hero-title">Generate</div>
+      <div class="hero-text">IDGs, APU generator, and external power create the main aircraft electrical supply.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🎛️</div>
+      <div class="hero-title">Control</div>
+      <div class="hero-text">GCU, GAPCU, bus tie contactors, and source priority decide who powers what.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🔁</div>
+      <div class="hero-title">Convert</div>
+      <div class="hero-text">TRs convert AC to DC, while the static inverter converts battery DC back to AC.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🪂</div>
+      <div class="hero-title">Backup</div>
+      <div class="hero-text">Batteries, RAT, and emergency generator keep essential systems alive during failures.</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="section-grid">
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Big Picture — How It Works</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">AC power is primary</span><span class="real-world"><span class="arrow">→</span>AC runs most systems. DC power is secondary and comes from TRs converting AC.</span></div>
+          <div class="idea-card"><span class="main-idea">Main power sources</span><span class="real-world"><span class="arrow">→</span>IDG 1, IDG 2, APU GEN, and external power.</span></div>
+          <div class="idea-card"><span class="main-idea">Two AC sides normally stay separate</span><span class="real-world"><span class="arrow">→</span>AC BUS 1 and AC BUS 2 normally run independently until the system needs a tie.</span><span class="tag">bus logic</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚙️</div><h2>Power Source Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Priority starts with own engine IDG</span><span class="real-world"><span class="arrow">→</span>Each side prefers its own generator first.</span></div>
+          <div class="idea-card"><span class="main-idea">Then external power, APU, opposite IDG</span><span class="real-world"><span class="arrow">→</span>The system automatically picks the best available source.</span></div>
+          <div class="idea-card"><span class="main-idea">No paralleling of generators</span><span class="real-world"><span class="arrow">→</span>The system prevents two sources from feeding the same bus at the same time.</span><span class="tag">very important</span></div>
+          <div class="idea-card"><span class="main-idea">BTCs auto-connect when needed</span><span class="real-world"><span class="arrow">→</span>If one side is lost, bus tie contactors let the opposite side support both.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚡</div><h2>Generators / IDG</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">IDG makes constant 400 Hz power</span><span class="real-world"><span class="arrow">→</span>It converts variable engine speed into stable aircraft AC power using CSD logic.</span></div>
+          <div class="idea-card"><span class="main-idea">Each engine drives its own generator</span><span class="real-world"><span class="arrow">→</span>GEN 1 normally powers BUS 1. GEN 2 normally powers BUS 2.</span></div>
+          <div class="idea-card"><span class="main-idea">IDG disconnect is one-way in flight</span><span class="real-world"><span class="arrow">→</span>You can disconnect it, but reconnect/reset is ground only.</span><span class="tag">don’t forget</span></div>
+          <div class="idea-card"><span class="main-idea">Common faults are oil temp or pressure</span><span class="real-world"><span class="arrow">→</span>Fault light usually means the IDG is protecting itself from damage.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚠️</div><h2>IDG Protection Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Oil temp above 185°C</span><span class="real-world"><span class="arrow">→</span>Warning condition. Disconnect is required.</span></div>
+          <div class="idea-card"><span class="main-idea">Oil temp above 200°C</span><span class="real-world"><span class="arrow">→</span>Auto disconnect to prevent damage.</span><span class="tag">self protect</span></div>
+          <div class="idea-card"><span class="main-idea">Low oil pressure below 140 psi</span><span class="real-world"><span class="arrow">→</span>Creates an IDG fault condition.</span></div>
+          <div class="idea-card"><span class="main-idea">Line takeaway</span><span class="real-world"><span class="arrow">→</span>If you see an IDG fault, act immediately or the unit may self-protect.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔌</div><h2>External Power</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">AVAIL light means power quality is good</span><span class="real-world"><span class="arrow">→</span>Without AVAIL, external power will not connect.</span></div>
+          <div class="idea-card"><span class="main-idea">GAPCU monitors the source</span><span class="real-world"><span class="arrow">→</span>Voltage, frequency, phase, overload, and other parameters must be acceptable.</span></div>
+          <div class="idea-card"><span class="main-idea">Bad parameter equals disconnect</span><span class="real-world"><span class="arrow">→</span>If quality drops, the aircraft protects the bus.</span><span class="tag">ground ops gold</span></div>
+          <div class="idea-card"><span class="main-idea">External power has priority over APU</span><span class="real-world"><span class="arrow">→</span>When both are available, external power is used first.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔋</div><h2>DC System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Three TRs convert AC to 28V DC</span><span class="real-world"><span class="arrow">→</span>TR1, TR2, and ESS TR keep DC buses powered.</span></div>
+          <div class="idea-card"><span class="main-idea">Automatic backup between TRs</span><span class="real-world"><span class="arrow">→</span>If one TR fails, another takes over automatically.</span></div>
+          <div class="idea-card"><span class="main-idea">ESS TR feeds essential DC during failures</span><span class="real-world"><span class="arrow">→</span>It comes online automatically when the logic needs it.</span><span class="tag">essential power</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔋</div><h2>Batteries</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Two batteries around 24V each</span><span class="real-world"><span class="arrow">→</span>Used for APU start and emergency power.</span></div>
+          <div class="idea-card"><span class="main-idea">BCL protects the battery</span><span class="real-world"><span class="arrow">→</span>Prevents overheat, overcharge, and deep discharge.</span></div>
+          <div class="idea-card"><span class="main-idea">Normally isolated in flight</span><span class="real-world"><span class="arrow">→</span>Batteries are not continuously powering the system during normal flight.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🚨</div><h2>Emergency Power</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Loss of both AC buses deploys RAT</span><span class="real-world"><span class="arrow">→</span>The RAT deploys automatically when both AC buses are lost.</span></div>
+          <div class="idea-card"><span class="main-idea">RAT drives the emergency generator</span><span class="real-world"><span class="arrow">→</span>Hydraulic power from the blue system drives emergency generation.</span></div>
+          <div class="idea-card"><span class="main-idea">Only essential buses are powered</span><span class="real-world"><span class="arrow">→</span>Emergency generation is for flight-critical systems only.</span><span class="tag">critical system</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔄</div><h2>Static Inverter</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Battery DC becomes AC</span><span class="real-world"><span class="arrow">→</span>The static inverter converts DC battery power into AC power.</span></div>
+          <div class="idea-card"><span class="main-idea">Useful when generators are not available</span><span class="real-world"><span class="arrow">→</span>It supports low-speed and emergency situations.</span></div>
+          <div class="idea-card"><span class="main-idea">Bridge during RAT transition</span><span class="real-world"><span class="arrow">→</span>Think of it as short-term backup AC while emergency logic catches up.</span><span class="tag">backup AC</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🎛️</div><h2>Electrical Control Panel</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">BUS TIE AUTO is normal</span><span class="real-world"><span class="arrow">→</span>Allows automatic bus tie logic to connect buses when needed.</span></div>
+          <div class="idea-card"><span class="main-idea">AC ESS FEED controls essential source</span><span class="real-world"><span class="arrow">→</span>Manual backup to select which bus feeds essential power.</span></div>
+          <div class="idea-card"><span class="main-idea">GEN pushbutton connects generator to bus</span><span class="real-world"><span class="arrow">→</span>Generator must be ON and healthy before it supplies the bus.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚠️</div><h2>Load Shedding</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Galley loads go first</span><span class="real-world"><span class="arrow">→</span>Automatic load shedding removes non-essential load during overload.</span><span class="tag">ops reality</span></div>
+          <div class="idea-card"><span class="main-idea">Single generator means automatic load reduction</span><span class="real-world"><span class="arrow">→</span>The system prevents overloading the remaining source.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>Maintenance / Troubleshooting Gold</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Most problems are not the generator</span><span class="real-world"><span class="arrow">→</span>Usually contactors, control units, sensors, or bus logic.</span></div>
+          <div class="idea-card"><span class="main-idea">Missing power? Follow the path</span><span class="real-world"><span class="arrow">→</span>Check source, contactor, and priority logic before shotgunning parts.</span></div>
+          <div class="idea-card"><span class="main-idea">CFDS/BITE stores faults</span><span class="real-world"><span class="arrow">→</span>Always check fault history before troubleshooting.</span><span class="tag">check BITE first</span></div>
+          <div class="idea-card"><span class="main-idea">TR faults need reset after clearing</span><span class="real-world"><span class="arrow">→</span>They will not always auto-recover just because the fault condition is gone.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🔥 Easy Way to Remember ATA 24</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Generate Power</div><ul><li>IDGs</li><li>APU generator</li><li>External power</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Control & Protect</div><ul><li>GCU / GAPCU</li><li>Bus tie logic</li><li>Protection trips</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Convert Power</div><ul><li>TRs: AC to DC</li><li>Static inverter: DC to AC</li><li>ESS TR backup</li></ul></div>
+        <div class="map-card"><div class="map-number">4</div><div class="map-title">Backup Power</div><ul><li>Batteries</li><li>RAT</li><li>Emergency generator</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Real Line MX Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">Most faults<br><small>contactors or logic</small></div>
+        <div class="fail-chip">IDG fault<br><small>act immediately</small></div>
+        <div class="fail-chip">EXT PWR issue<br><small>quality parameter</small></div>
+        <div class="fail-chip">Power missing<br><small>follow bus logic</small></div>
+        <div class="fail-chip">Confusing fault<br><small>check CFDS first</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    A320 ATA 24 quick-study page • Electrical generation, control, conversion, backup power, and line-maintenance troubleshooting logic.
+  </footer>
+</body>
+</html>

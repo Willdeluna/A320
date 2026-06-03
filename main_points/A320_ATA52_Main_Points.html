@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 52 Doors Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+      --steel: #c9d3df;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(201,211,223,0.20), transparent 30%),
+        radial-gradient(circle at 88% 18%, rgba(255,159,28,0.22), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(98,216,255,0.09), transparent 36%),
+        linear-gradient(135deg, #000, #070707 45%, #101214);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,211,223,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(201,211,223,.15);
+    }
+
+    .subtitle {
+      max-width: 940px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(201,211,223,.10), rgba(0,0,0,.74));
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 142px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(255,159,28,.20), 0 0 24px rgba(201,211,223,.12);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(255,159,28,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.1rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.15rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; font-size: .95rem; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .master-flow {
+      margin-bottom: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(201,211,223,.10), rgba(0,0,0,.72));
+    }
+
+    .master-flow h2 {
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .flow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      flex: 1 1 155px;
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(0,0,0,.55);
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .flow-step:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(255,159,28,.17);
+    }
+
+    .flow-step strong {
+      color: var(--amber);
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .flow-step span {
+      color: #ead9b8;
+      display: block;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .three-pack {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .pack-card {
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.68);
+      border-radius: 22px;
+      padding: 18px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .pack-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 0 28px rgba(255,159,28,.20);
+    }
+
+    .pack-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+
+    .pack-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.7;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--steel), var(--orange), var(--blue), transparent);
+      opacity: .82;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(201,211,223,.25), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(201,211,223,.035));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.17), rgba(201,211,223,.10));
+      box-shadow: 0 0 26px rgba(255,159,28,.17), 0 0 20px rgba(201,211,223,.12);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .danger-box {
+      border: 1px solid rgba(255,95,86,.65);
+      background: linear-gradient(135deg, rgba(255,95,86,.13), rgba(0,0,0,.72));
+    }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(201,211,223,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.1rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.6;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    .fail-chip small {
+      display: block;
+      margin-top: 5px;
+      color: #ffc8c4;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 1000px) {
+      .section-grid, .three-pack { grid-template-columns: 1fr; }
+      .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .fail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .hero-strip, .map-grid, .fail-list { grid-template-columns: 1fr; }
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .system-section, .memory-map, .master-flow, .pack-card { border-radius: 18px; padding: 14px; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 52 • Doors</div>
+    <h1>Doors Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for plug-type door pressure logic, door structure, locks, seals, proximity sensors, ECAM DOOR indications, slides, girt bars, overwing exits, cargo door hydraulics, interlocks, and troubleshooting flow.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card">
+      <div class="hero-icon">🚪</div>
+      <div class="hero-title">Access</div>
+      <div class="hero-text">Doors allow passenger, crew, cargo, service, and emergency access.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🧱</div>
+      <div class="hero-title">Structure</div>
+      <div class="hero-text">Passenger doors are part of the pressure vessel and load path.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🔒</div>
+      <div class="hero-title">Lock</div>
+      <div class="hero-text">Hooks, shafts, rods, bellcranks, and overcenter mechanisms secure the doors.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🛝</div>
+      <div class="hero-title">Evacuate</div>
+      <div class="hero-text">Slide arming, girt bar logic, and inflation systems enable emergency escape.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">📊</div>
+      <div class="hero-title">Indicate</div>
+      <div class="hero-text">Sensors feed SDAC/FWC/ECAM logic for door status and warnings.</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="master-flow">
+      <h2>🧠 ATA 52 Master Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>Structure</strong><span>Door, frame, stops, pressure vessel load path.</span></div>
+        <div class="flow-step"><strong>Lock</strong><span>Hooks, shafts, overcenter, latch sequence.</span></div>
+        <div class="flow-step"><strong>Seal</strong><span>Cabin pressure inflates/loads the seal.</span></div>
+        <div class="flow-step"><strong>Sensors</strong><span>Door, lock, handle, slide mode feedback.</span></div>
+        <div class="flow-step"><strong>Safety</strong><span>ECAM, pressure warning, slide deployment, interlocks.</span></div>
+      </div>
+    </section>
+
+    <section class="three-pack">
+      <div class="pack-card">
+        <div class="pack-title">🚪 Passenger Doors</div>
+        <ul>
+          <li>Plug-type doors.</li>
+          <li>Pressure helps keep them closed.</li>
+          <li>Include slide/evacuation logic.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">📦 Cargo Doors</div>
+        <ul>
+          <li>Hydraulic, outward opening.</li>
+          <li>Yellow hydraulic system operation.</li>
+          <li>Electrical logic and safety interlocks.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">🛝 Slides</div>
+        <ul>
+          <li>Armed + door open = auto deploy.</li>
+          <li>Girt bar is the physical link.</li>
+          <li>Gas + aspirator gives fast inflation.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section-grid">
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Core Concept</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Doors are structural + safety systems</span><span class="real-world"><span class="arrow">→</span>They seal pressure, carry loads, allow access, and support evacuation.</span><span class="tag">big idea</span></div>
+          <div class="idea-card"><span class="main-idea">Not just access panels</span><span class="real-world"><span class="arrow">→</span>Door systems combine structure, locking, sensors, logic, indications, and safety systems.</span></div>
+          <div class="idea-card"><span class="main-idea">Real model</span><span class="real-world"><span class="arrow">→</span>Structure → lock mechanism → sensors → logic → indications → safety systems.</span><span class="tag">MX map</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧩</div><h2>Door Types</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Passenger / crew doors</span><span class="real-world"><span class="arrow">→</span>Plug-type doors with slide systems.</span></div>
+          <div class="idea-card"><span class="main-idea">Emergency exits</span><span class="real-world"><span class="arrow">→</span>Smaller plug-type exits with different handling and slide logic.</span></div>
+          <div class="idea-card"><span class="main-idea">Cargo doors</span><span class="real-world"><span class="arrow">→</span>Hydraulic, outward-opening doors with electrical and hydraulic control.</span></div>
+          <div class="idea-card"><span class="main-idea">Service/access/cockpit doors</span><span class="real-world"><span class="arrow">→</span>Different structural and security functions depending on door type.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧱</div><h2>Plug-Type Door Physics</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Passenger doors move inward first</span><span class="real-world"><span class="arrow">→</span>Then up, outward, and forward to clear the fuselage opening.</span><span class="tag">very important</span></div>
+          <div class="idea-card"><span class="main-idea">Cabin pressure helps keep door closed</span><span class="real-world"><span class="arrow">→</span>Pressure pushes the plug door into its frame.</span></div>
+          <div class="idea-card"><span class="main-idea">Pressure is part of the safety design</span><span class="real-world"><span class="arrow">→</span>The latch locks the door, but pressure loads it into the stops/frame.</span><span class="tag">pressure logic</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🏗️</div><h2>Door Structure & Load Path</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Door is part of pressure vessel</span><span class="real-world"><span class="arrow">→</span>Skin, frame, longerons, and stop fittings carry pressurization loads.</span><span class="tag">structure</span></div>
+          <div class="idea-card"><span class="main-idea">Pressure loads transfer through stops</span><span class="real-world"><span class="arrow">→</span>Cabin pressure loads the door into stop fittings and fuselage structure.</span></div>
+          <div class="idea-card"><span class="main-idea">Misalignment matters</span><span class="real-world"><span class="arrow">→</span>Rigging, stops, seals, and fit can create leaks or indication faults.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔒</div><h2>Locking Mechanism</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Overcenter mechanical safety lock</span><span class="real-world"><span class="arrow">→</span>Locking hooks, shaft, link rods, and bellcranks secure the door mechanically.</span><span class="tag">critical</span></div>
+          <div class="idea-card"><span class="main-idea">Unlock sequence</span><span class="real-world"><span class="arrow">→</span>Handle moves shaft, shaft rotates, hooks disengage, door becomes free to move.</span></div>
+          <div class="idea-card"><span class="main-idea">Lock sequence</span><span class="real-world"><span class="arrow">→</span>Door closes, shaft rotates, hooks engage, overcenter lock secures the door.</span></div>
+          <div class="idea-card"><span class="main-idea">Must be fully locked before pressurization</span><span class="real-world"><span class="arrow">→</span>Partial lock or bad sensor feedback can create ECAM/warning issues.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔁</div><h2>Door Movement System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Movement is mechanically controlled</span><span class="real-world"><span class="arrow">→</span>Lifting lever, support arm, and guide arms move the door through its travel path.</span><span class="tag">not hydraulic</span></div>
+          <div class="idea-card"><span class="main-idea">Door moves up to clear stops</span><span class="real-world"><span class="arrow">→</span>The door must lift before it can move outward safely.</span></div>
+          <div class="idea-card"><span class="main-idea">Rigging affects feel and indication</span><span class="real-world"><span class="arrow">→</span>Stiff movement or bad alignment can cause latch/sensor mismatch.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section danger-box">
+        <div class="section-head"><div class="section-icon">⚠️</div><h2>Door Damper & Emergency Cylinder</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Controls and assists door movement</span><span class="real-world"><span class="arrow">→</span>Dampers slow normal movement; emergency cylinders assist rapid opening.</span></div>
+          <div class="idea-card"><span class="main-idea">Emergency assist can open violently</span><span class="real-world"><span class="arrow">→</span>Gas assist can rapidly drive the door open during emergency operation.</span><span class="tag">hazard</span></div>
+          <div class="idea-card"><span class="main-idea">Disarm during maintenance</span><span class="real-world"><span class="arrow">→</span>Always respect door assist and slide arming safety before work.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧿</div><h2>Door Seal</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Pressure-activated sealing</span><span class="real-world"><span class="arrow">→</span>The inflatable rubber seal is helped by cabin pressure, not just mechanical compression.</span><span class="tag">pressurization</span></div>
+          <div class="idea-card"><span class="main-idea">Seal condition affects leaks</span><span class="real-world"><span class="arrow">→</span>Cuts, flattening, contamination, or bad seating can create pressure/noise complaints.</span></div>
+          <div class="idea-card"><span class="main-idea">Seal troubleshooting includes rigging</span><span class="real-world"><span class="arrow">→</span>A “seal leak” can be seal condition or door fit/alignment.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📡</div><h2>Proximity Sensors</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Most door faults are sensor/indication faults</span><span class="real-world"><span class="arrow">→</span>Sensors monitor door position, lock status, handle position, and slide mode.</span><span class="tag">common fault</span></div>
+          <div class="idea-card"><span class="main-idea">Data path</span><span class="real-world"><span class="arrow">→</span>Sensors → SDAC → FWC → ECAM.</span></div>
+          <div class="idea-card"><span class="main-idea">Indications come from logic</span><span class="real-world"><span class="arrow">→</span>ECAM does not “see the door” directly; it sees processed sensor data.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📊</div><h2>Indications & Warnings</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">ECAM DOOR page is primary</span><span class="real-world"><span class="arrow">→</span>Green means closed, amber means open, and amber X means invalid data.</span><span class="tag">start here</span></div>
+          <div class="idea-card"><span class="main-idea">Cabin indications matter</span><span class="real-world"><span class="arrow">→</span>SLIDE ARMED lights and CABIN PRESS warnings protect crew and passengers.</span></div>
+          <div class="idea-card"><span class="main-idea">Warnings prevent unsafe opening</span><span class="real-world"><span class="arrow">→</span>Pressure warning logic helps stop doors from being opened when pressurized.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section danger-box">
+        <div class="section-head"><div class="section-icon">🚨</div><h2>Cabin Pressure Warning Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Prevents opening a pressurized door</span><span class="real-world"><span class="arrow">→</span>Warnings trigger when door opening would be unsafe due to cabin pressure.</span><span class="tag">critical safety</span></div>
+          <div class="idea-card"><span class="main-idea">Logic uses multiple conditions</span><span class="real-world"><span class="arrow">→</span>Slide status, engine status, and cabin pressure logic can combine for warnings.</span></div>
+          <div class="idea-card"><span class="main-idea">Do not ignore pressure warnings</span><span class="real-world"><span class="arrow">→</span>A pressurized door event can be violent and dangerous.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛝</div><h2>Escape Slide System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Armed + door open = slide deploys</span><span class="real-world"><span class="arrow">→</span>If the door is armed and opened, the slide deploys automatically.</span><span class="tag">critical</span></div>
+          <div class="idea-card"><span class="main-idea">Disarmed + door open = no deployment</span><span class="real-world"><span class="arrow">→</span>Disarming changes the physical connection so the slide stays with the door.</span></div>
+          <div class="idea-card"><span class="main-idea">Slide system is safety equipment</span><span class="real-world"><span class="arrow">→</span>Treat arming levers, girt bar, reservoir, and inflation parts carefully.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔗</div><h2>Girt Bar</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Physical slide deployment link</span><span class="real-world"><span class="arrow">→</span>The girt bar connects the slide to the aircraft floor when armed.</span><span class="tag">key component</span></div>
+          <div class="idea-card"><span class="main-idea">Armed mode</span><span class="real-world"><span class="arrow">→</span>Girt bar attached to floor, so opening the door pulls the slide out.</span></div>
+          <div class="idea-card"><span class="main-idea">Disarmed mode</span><span class="real-world"><span class="arrow">→</span>Girt bar attached to door, so opening the door does not deploy the slide.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">💨</div><h2>Slide Inflation</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Deployment sequence</span><span class="real-world"><span class="arrow">→</span>Door opens → slide pulled out → lanyard pulls valve → inflation starts.</span></div>
+          <div class="idea-card"><span class="main-idea">Gas plus aspirator</span><span class="real-world"><span class="arrow">→</span>Reservoir gas starts inflation, while aspirator pulls in ambient air for rapid volume.</span><span class="tag">fast inflate</span></div>
+          <div class="idea-card"><span class="main-idea">Manual inflation backup</span><span class="real-world"><span class="arrow">→</span>Red PULL handle is used if automatic inflation fails.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🪟</div><h2>Overwing Exits</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Different from passenger doors</span><span class="real-world"><span class="arrow">→</span>Overwing exits are plug-in hatches manually removed by passengers/crew.</span><span class="tag">different system</span></div>
+          <div class="idea-card"><span class="main-idea">Slide stored separately</span><span class="real-world"><span class="arrow">→</span>Overwing slide may be stored in the wing fairing, not in the hatch itself.</span></div>
+          <div class="idea-card"><span class="main-idea">Hatch removal triggers slide logic</span><span class="real-world"><span class="arrow">→</span>Latch pin and release mechanism control automatic deployment.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📦</div><h2>Cargo Doors</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Very different system</span><span class="real-world"><span class="arrow">→</span>Cargo doors are hydraulic, electrically controlled, and outward opening.</span><span class="tag">hydraulic</span></div>
+          <div class="idea-card"><span class="main-idea">Yellow hydraulic system powers operation</span><span class="real-world"><span class="arrow">→</span>Electric pump/Yellow system pressure moves actuators and door mechanism.</span></div>
+          <div class="idea-card"><span class="main-idea">Mechanical + hydraulic integration</span><span class="real-world"><span class="arrow">→</span>Locking shaft, hooks, vent door, drift pins, and actuators all coordinate.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section danger-box">
+        <div class="section-head"><div class="section-icon">🌬️</div><h2>Vent Door Safety</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Vents pressure before opening</span><span class="real-world"><span class="arrow">→</span>The vent door releases pressure before the cargo door opens.</span><span class="tag">safety critical</span></div>
+          <div class="idea-card"><span class="main-idea">Same safety principle as plug doors</span><span class="real-world"><span class="arrow">→</span>Never fight pressure; remove pressure first.</span></div>
+          <div class="idea-card"><span class="main-idea">Vent logic faults can inhibit operation</span><span class="real-world"><span class="arrow">→</span>If venting or feedback is invalid, control logic can prevent door movement.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">💧</div><h2>Cargo Door Hydraulics</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Hydraulic pressure moves the cargo door</span><span class="real-world"><span class="arrow">→</span>Yellow system pressure powers actuators for opening/closing.</span></div>
+          <div class="idea-card"><span class="main-idea">Dual actuators share load</span><span class="real-world"><span class="arrow">→</span>Actuators move the door and include internal mechanical locking features.</span></div>
+          <div class="idea-card"><span class="main-idea">Actuators lock mechanically</span><span class="real-world"><span class="arrow">→</span>The door is not held only by hydraulic pressure.</span><span class="tag">mechanical lock</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚡</div><h2>Cargo Door Electrical Control</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Logic controls hydraulic action</span><span class="real-world"><span class="arrow">→</span>LGCIU, relays, and selector valves coordinate cargo door operation.</span><span class="tag">ATA 32 link</span></div>
+          <div class="idea-card"><span class="main-idea">Safety interlocks prevent unsafe operation</span><span class="real-world"><span class="arrow">→</span>Door locked, aircraft not on ground, or invalid logic can inhibit movement.</span></div>
+          <div class="idea-card"><span class="main-idea">Check logic before hardware</span><span class="real-world"><span class="arrow">→</span>No movement may be a valid inhibit, not a failed actuator.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section wide">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>Common Failures & Line Reality</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Most common faults</span><span class="real-world"><span class="arrow">→</span>Proximity sensors, slide armed/disarm faults, cargo door valve issues, hydraulic issues, and rigging/misalignment.</span></div>
+          <div class="idea-card"><span class="main-idea">Structural failure is rare</span><span class="real-world"><span class="arrow">→</span>Most write-ups are indication, sensor, rigging, slide, valve, or hydraulic control issues.</span><span class="tag">line MX gold</span></div>
+          <div class="idea-card"><span class="main-idea">Troubleshoot indication first</span><span class="real-world"><span class="arrow">→</span>ECAM DOOR page and sensor status tell you where to start.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="master-flow" style="margin-top:20px;">
+      <h2>🔧 Pro Troubleshooting Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>1. ECAM DOOR</strong><span>Check closed/open/invalid indications.</span></div>
+        <div class="flow-step"><strong>2. Identify</strong><span>Cabin door, cargo door, overwing exit, or slide system.</span></div>
+        <div class="flow-step"><strong>3. Status</strong><span>Locked? Closed? Armed? Pressurized?</span></div>
+        <div class="flow-step"><strong>4. Sensors</strong><span>Proximity sensors, handle, lock, slide mode feedback.</span></div>
+        <div class="flow-step"><strong>5. Mechanism</strong><span>Latch, hook, shaft, alignment, seal, damper.</span></div>
+        <div class="flow-step"><strong>6. Cargo</strong><span>Yellow hydraulics, valves, actuators, LGCIU/interlocks.</span></div>
+      </div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Master Simplified Model</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Passenger Doors</div><ul><li>Structure</li><li>Lock</li><li>Seal</li><li>Sensors</li><li>Slide system</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Cargo Doors</div><ul><li>Handle</li><li>Unlock</li><li>Hydraulics</li><li>Actuators</li><li>Lock</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Slide System</div><ul><li>Arm</li><li>Open</li><li>Deploy</li><li>Inflate</li><li>Evacuate</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Final Most Important Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">Plug doors<small>pressure keeps closed</small></div>
+        <div class="fail-chip">Overcenter<small>mechanical safety</small></div>
+        <div class="fail-chip">Prox sensors<small>drive indications</small></div>
+        <div class="fail-chip">Slides<small>depend on armed status</small></div>
+        <div class="fail-chip">Girt bar<small>physical slide link</small></div>
+        <div class="fail-chip">Seal<small>pressure activated</small></div>
+        <div class="fail-chip">Cargo doors<small>hydraulic + electrical</small></div>
+        <div class="fail-chip">Venting<small>before opening</small></div>
+        <div class="fail-chip">Most faults<small>sensors/indication</small></div>
+        <div class="fail-chip">ATA links<small>31 / 32 / 21 / 25</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    A320 ATA 52 quick-study page • Passenger doors, cargo doors, plug-door pressure logic, locks, seals, slides, proximity sensors, ECAM DOOR indications, and line-maintenance troubleshooting flow.
+  </footer>
+</body>
+</html>

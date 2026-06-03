@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 47 Fuel Tank Inerting Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+      --nitro: #b58cff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(181,140,255,0.22), transparent 30%),
+        radial-gradient(circle at 88% 18%, rgba(255,159,28,0.20), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(140,255,177,0.08), transparent 36%),
+        linear-gradient(135deg, #000, #070707 45%, #12091a);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(181,140,255,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(181,140,255,.18);
+    }
+
+    .subtitle {
+      max-width: 940px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(181,140,255,.10), rgba(0,0,0,.74));
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 142px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(181,140,255,.20), 0 0 24px rgba(255,159,28,.16);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(181,140,255,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.1rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.15rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; font-size: .95rem; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .master-flow {
+      margin-bottom: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(181,140,255,.11), rgba(0,0,0,.72));
+    }
+
+    .master-flow h2 {
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .flow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      flex: 1 1 155px;
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(0,0,0,.55);
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .flow-step:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(181,140,255,.17);
+    }
+
+    .flow-step strong {
+      color: var(--amber);
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .flow-step span {
+      color: #ead9b8;
+      display: block;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .three-pack {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .pack-card {
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.68);
+      border-radius: 22px;
+      padding: 18px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .pack-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 0 28px rgba(255,159,28,.20);
+    }
+
+    .pack-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+
+    .pack-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.7;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--nitro), var(--orange), var(--green), transparent);
+      opacity: .82;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(181,140,255,.28), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(181,140,255,.035));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.17), rgba(181,140,255,.10));
+      box-shadow: 0 0 26px rgba(181,140,255,.18), 0 0 20px rgba(255,159,28,.15);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .danger-box {
+      border: 1px solid rgba(255,95,86,.65);
+      background: linear-gradient(135deg, rgba(255,95,86,.13), rgba(0,0,0,.72));
+    }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(181,140,255,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.1rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.6;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    .fail-chip small {
+      display: block;
+      margin-top: 5px;
+      color: #ffc8c4;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 1000px) {
+      .section-grid, .three-pack { grid-template-columns: 1fr; }
+      .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .fail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .hero-strip, .map-grid, .fail-list { grid-template-columns: 1fr; }
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .system-section, .memory-map, .master-flow, .pack-card { border-radius: 18px; padding: 14px; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 47 • Fuel Tank Inerting System</div>
+    <h1>Fuel Tank Inerting Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for FTIS, CSAS, IGGS, ASM nitrogen generation, NEA/OEA flow, oxygen sensor logic, DFSOV control, autonomous operation, ECAM/CFDS faults, and ATA 36 bleed-air dependency.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card">
+      <div class="hero-icon">🛡️</div>
+      <div class="hero-title">Prevent Explosion</div>
+      <div class="hero-text">FTIS lowers oxygen in the fuel tank ullage so combustion cannot easily occur.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🔥</div>
+      <div class="hero-title">Bleed Air In</div>
+      <div class="hero-text">The system starts with conditioned bleed air from ATA 36 sources.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🧪</div>
+      <div class="hero-title">Separate Oxygen</div>
+      <div class="hero-text">The ASM separates air into nitrogen-enriched air and oxygen-enriched air.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🌫️</div>
+      <div class="hero-title">NEA to Tank</div>
+      <div class="hero-text">Nitrogen-enriched air enters the tank and displaces oxygen through venting.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🧠</div>
+      <div class="hero-title">Auto Protect</div>
+      <div class="hero-text">Controllers monitor temp, pressure, oxygen level, valves, and shut down if unsafe.</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="master-flow">
+      <h2>🧠 ATA 47 Master Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>Bleed Air</strong><span>Engine/APU bleed air supplies the system.</span></div>
+        <div class="flow-step"><strong>CSAS</strong><span>Conditions air: cools, filters, controls pressure.</span></div>
+        <div class="flow-step"><strong>IGGS / ASM</strong><span>Removes oxygen and creates nitrogen-enriched air.</span></div>
+        <div class="flow-step"><strong>NEA Flow</strong><span>DFSOV controls NEA flow into the tank.</span></div>
+        <div class="flow-step"><strong>Protection</strong><span>Sensors and ICU shut down unsafe conditions.</span></div>
+      </div>
+    </section>
+
+    <section class="three-pack">
+      <div class="pack-card">
+        <div class="pack-title">🌬️ CSAS</div>
+        <ul>
+          <li>Conditions bleed air before IGGS.</li>
+          <li>Controls temperature and pressure.</li>
+          <li>IGGS will not work correctly without proper air conditioning.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">🧪 IGGS</div>
+        <ul>
+          <li>Removes oxygen from air.</li>
+          <li>ASM is the heart of nitrogen generation.</li>
+          <li>NEA goes to tank; OEA goes overboard.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">🧠 ICU / Protection</div>
+        <ul>
+          <li>Controls valves and flow rate.</li>
+          <li>Monitors oxygen, pressure, and temperature.</li>
+          <li>Fails safe by closing valves on faults.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section-grid">
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Core Concept</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">ATA 47 prevents fuel tank explosion</span><span class="real-world"><span class="arrow">→</span>It reduces oxygen concentration in the fuel tank using Nitrogen Enriched Air.</span><span class="tag">prevention</span></div>
+          <div class="idea-card"><span class="main-idea">Not fire suppression</span><span class="real-world"><span class="arrow">→</span>The goal is to make the tank ullage non-flammable before ignition can occur.</span></div>
+          <div class="idea-card"><span class="main-idea">Lower oxygen means no combustion</span><span class="real-world"><span class="arrow">→</span>The system displaces oxygen so the center tank environment stays below flammability risk.</span><span class="tag">big idea</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧩</div><h2>System Architecture</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Two main subsystems</span><span class="real-world"><span class="arrow">→</span>CSAS prepares bleed air, and IGGS removes oxygen to generate nitrogen-enriched air.</span></div>
+          <div class="idea-card"><span class="main-idea">Basic flow</span><span class="real-world"><span class="arrow">→</span>Bleed air → CSAS → IGGS → fuel tank.</span></div>
+          <div class="idea-card"><span class="main-idea">Heavy ATA 36 dependency</span><span class="real-world"><span class="arrow">→</span>No correct bleed air means no reliable fuel tank inerting.</span><span class="tag">ATA 36 link</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔁</div><h2>How It Works</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Step 1: bleed air supply</span><span class="real-world"><span class="arrow">→</span>Air is taken from engine or APU bleed sources.</span></div>
+          <div class="idea-card"><span class="main-idea">Step 2: CSAS conditions air</span><span class="real-world"><span class="arrow">→</span>Air is cooled, pressure-controlled, and prepared for the IGGS.</span></div>
+          <div class="idea-card"><span class="main-idea">Step 3: IGGS separates oxygen</span><span class="real-world"><span class="arrow">→</span>ASM creates NEA for the tank and OEA that is vented overboard.</span></div>
+          <div class="idea-card"><span class="main-idea">Step 4: tank becomes inert</span><span class="real-world"><span class="arrow">→</span>NEA enters tank ullage and oxygen is displaced through the vent system.</span><span class="tag">non-flammable</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🌬️</div><h2>CSAS — Air Conditioning for IGGS</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">CSAS prepares air before separation</span><span class="real-world"><span class="arrow">→</span>It removes ozone, cools air, and controls pressure before air reaches IGGS.</span><span class="tag">critical</span></div>
+          <div class="idea-card"><span class="main-idea">Main components</span><span class="real-world"><span class="arrow">→</span>Isolation valve, ozone converter, heat exchanger, hot air bypass valve, and sensors.</span></div>
+          <div class="idea-card"><span class="main-idea">IGGS needs correct air conditions</span><span class="real-world"><span class="arrow">→</span>Too hot, too much pressure, or contaminated air can shut the system down.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🎛️</div><h2>CSAS Control</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Controlled by CCU</span><span class="real-world"><span class="arrow">→</span>The CSAS Controller Unit opens valves, monitors temp/pressure, and protects the air supply.</span></div>
+          <div class="idea-card"><span class="main-idea">Isolation valve starts airflow</span><span class="real-world"><span class="arrow">→</span>Air only flows when system conditions allow the isolation valve to open.</span></div>
+          <div class="idea-card"><span class="main-idea">Protection closes the system</span><span class="real-world"><span class="arrow">→</span>Too hot or too high pressure can make the CCU shut the valve.</span><span class="tag">fail safe</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧪</div><h2>IGGS — Main System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">IGGS removes oxygen from air</span><span class="real-world"><span class="arrow">→</span>It creates nitrogen-enriched air for the tank and sends oxygen-enriched air overboard.</span><span class="tag">main function</span></div>
+          <div class="idea-card"><span class="main-idea">Monitors air quality and performance</span><span class="real-world"><span class="arrow">→</span>Sensors verify pressure, temperature, oxygen concentration, and valve behavior.</span></div>
+          <div class="idea-card"><span class="main-idea">Automatic safety system</span><span class="real-world"><span class="arrow">→</span>It operates without crew control and protects itself if conditions are not right.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🫧</div><h2>ASM — Air Separation Module</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Heart of the system</span><span class="real-world"><span class="arrow">→</span>The ASM uses membrane fibers to separate oxygen and nitrogen.</span><span class="tag">core component</span></div>
+          <div class="idea-card"><span class="main-idea">Produces NEA</span><span class="real-world"><span class="arrow">→</span>Nitrogen-enriched air goes to the fuel tank to reduce oxygen level.</span></div>
+          <div class="idea-card"><span class="main-idea">ASM contamination hurts performance</span><span class="real-world"><span class="arrow">→</span>Oil, dust, or filter problems can reduce nitrogen generation effectiveness.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧰</div><h2>IGGS Components</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Key components</span><span class="real-world"><span class="arrow">→</span>Isolation valve, D-ULPA filter, pressure sensors, temperature sensor, oxygen sensor, ASM, and DFSOV.</span></div>
+          <div class="idea-card"><span class="main-idea">D-ULPA filter protects the ASM</span><span class="real-world"><span class="arrow">→</span>It removes contamination like oil and dust before air reaches sensitive membrane fibers.</span><span class="tag">filter matters</span></div>
+          <div class="idea-card"><span class="main-idea">Clogged filter reduces performance</span><span class="real-world"><span class="arrow">→</span>Reduced flow or contaminated air can create inerting faults without ASM failure.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📊</div><h2>Oxygen Sensor</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Verifies system effectiveness</span><span class="real-world"><span class="arrow">→</span>The oxygen sensor measures oxygen percentage in the nitrogen-enriched air.</span><span class="tag">huge</span></div>
+          <div class="idea-card"><span class="main-idea">High oxygen means shutdown</span><span class="real-world"><span class="arrow">→</span>If oxygen concentration is too high, the system can shut down to fail safe.</span></div>
+          <div class="idea-card"><span class="main-idea">Bad sensor can look like bad inerting</span><span class="real-world"><span class="arrow">→</span>Sensor faults can trigger shutdown even if airflow hardware is healthy.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🚪</div><h2>DFSOV</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Controls NEA flow</span><span class="real-world"><span class="arrow">→</span>The Dual Flow Shut-Off Valve controls nitrogen-enriched air flow into the tank.</span><span class="tag">flow valve</span></div>
+          <div class="idea-card"><span class="main-idea">Isolates system from tank</span><span class="real-world"><span class="arrow">→</span>DFSOV closes to protect the tank/system during faults or shutdown.</span></div>
+          <div class="idea-card"><span class="main-idea">Multiple flow modes</span><span class="real-world"><span class="arrow">→</span>Low, medium, and high flow support different flight phases and tank conditions.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛫</div><h2>Flow / Flight Phase Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Cruise uses steady flow</span><span class="real-world"><span class="arrow">→</span>System flow stabilizes tank oxygen concentration during normal flight.</span></div>
+          <div class="idea-card"><span class="main-idea">Descent may need increased flow</span><span class="real-world"><span class="arrow">→</span>Tank ullage volume and pressure change with altitude, so flow demand can change.</span><span class="tag">adaptive</span></div>
+          <div class="idea-card"><span class="main-idea">System changes with aircraft conditions</span><span class="real-world"><span class="arrow">→</span>FTIS is not one fixed-flow pipe; it adapts automatically.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>ICU — System Brain</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">IGGS Controller Unit controls the system</span><span class="real-world"><span class="arrow">→</span>ICU manages valves, sensors, flow rate, protection logic, and BITE.</span><span class="tag">brain</span></div>
+          <div class="idea-card"><span class="main-idea">Performs health monitoring</span><span class="real-world"><span class="arrow">→</span>It watches performance and commands shutdown when system conditions are unsafe.</span></div>
+          <div class="idea-card"><span class="main-idea">Use BITE for troubleshooting</span><span class="real-world"><span class="arrow">→</span>MCDU system tests help identify sensor, valve, and controller faults.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section danger-box">
+        <div class="section-head"><div class="section-icon">🛡️</div><h2>Protection Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">System fails safe</span><span class="real-world"><span class="arrow">→</span>High temp, high pressure, low pressure, or high oxygen concentration can shut it down.</span><span class="tag">fail safe</span></div>
+          <div class="idea-card"><span class="main-idea">Isolation valves normally closed</span><span class="real-world"><span class="arrow">→</span>Valves open only when the system is operating and conditions are safe.</span></div>
+          <div class="idea-card"><span class="main-idea">Backflow protection matters</span><span class="real-world"><span class="arrow">→</span>Check valves prevent fuel or vapor contamination from entering the IGGS side.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚙️</div><h2>Automatic Operation</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">No normal crew control</span><span class="real-world"><span class="arrow">→</span>The system operates automatically based on bleed availability and aircraft conditions.</span><span class="tag">autonomous</span></div>
+          <div class="idea-card"><span class="main-idea">Fault response closes valves</span><span class="real-world"><span class="arrow">→</span>On fault, isolation valve, DFSOV, and related valves close to protect the aircraft.</span></div>
+          <div class="idea-card"><span class="main-idea">ECAM/STATUS/CFDS guide maintenance</span><span class="real-world"><span class="arrow">→</span>FUEL INERTING SYS FAULT and maintenance messages point you to the stored fault path.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section danger-box wide">
+        <div class="section-head"><div class="section-icon">⚠️</div><h2>Maintenance Safety</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Low oxygen hazard</span><span class="real-world"><span class="arrow">→</span>System air can be oxygen-poor, creating a hypoxia risk around opened access areas.</span><span class="tag">life critical</span></div>
+          <div class="idea-card"><span class="main-idea">Wait after opening access</span><span class="real-world"><span class="arrow">→</span>Allow time for the area to ventilate before working near inerting system access.</span></div>
+          <div class="idea-card"><span class="main-idea">Treat NEA like a hazard</span><span class="real-world"><span class="arrow">→</span>It is not toxic smoke, but low oxygen atmosphere can still incapacitate you.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section wide">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>Common Failures & Line Reality</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Common fault sources</span><span class="real-world"><span class="arrow">→</span>Temperature sensors, pressure sensors, oxygen sensor issues, DFSOV failures, isolation valve issues, filter contamination, and bleed air problems.</span></div>
+          <div class="idea-card"><span class="main-idea">ASM failure is less common</span><span class="real-world"><span class="arrow">→</span>Check air supply, conditioning, sensors, filters, and valves before blaming the membrane module.</span><span class="tag">don’t shotgun ASM</span></div>
+          <div class="idea-card"><span class="main-idea">ATA 36 problems become ATA 47 problems</span><span class="real-world"><span class="arrow">→</span>If bleed air is wrong, CSAS/IGGS performance will suffer.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="master-flow" style="margin-top:20px;">
+      <h2>🔧 Pro Troubleshooting Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>1. ECAM / CFDS</strong><span>Check FUEL INERTING SYS FAULT and stored maintenance messages.</span></div>
+        <div class="flow-step"><strong>2. Bleed Source</strong><span>Verify ATA 36 source, pressure, and temperature availability.</span></div>
+        <div class="flow-step"><strong>3. CSAS</strong><span>Check temperature, pressure, isolation valve, CCU, and conditioning.</span></div>
+        <div class="flow-step"><strong>4. IGGS</strong><span>Check oxygen sensor, pressure sensors, D-ULPA filter, ASM, and DFSOV.</span></div>
+        <div class="flow-step"><strong>5. BITE Test</strong><span>Use MCDU system test to confirm valve/sensor/controller fault path.</span></div>
+      </div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Master Simplified Model</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Air Processing</div><ul><li>Bleed</li><li>CSAS</li><li>IGGS</li><li>Fuel tank</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Oxygen Removal</div><ul><li>Air</li><li>ASM</li><li>NEA to tank</li><li>OEA overboard</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Protection</div><ul><li>Sensors</li><li>ICU</li><li>Valve closure</li><li>Shutdown</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Final Most Important Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">ATA 47<small>prevents explosion</small></div>
+        <div class="fail-chip">CSAS<small>conditions air first</small></div>
+        <div class="fail-chip">ASM<small>nitrogen generator</small></div>
+        <div class="fail-chip">O₂ sensor<small>verifies performance</small></div>
+        <div class="fail-chip">DFSOV<small>flow + isolation</small></div>
+        <div class="fail-chip">Automatic<small>no pilot control</small></div>
+        <div class="fail-chip">Protection<small>quick shutdown</small></div>
+        <div class="fail-chip">Most faults<small>sensors/bleed</small></div>
+        <div class="fail-chip">ATA 36<small>drives ATA 47</small></div>
+        <div class="fail-chip">O₂ level<small>key parameter</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    A320 ATA 47 quick-study page • Fuel tank inerting, CSAS, IGGS, ASM, oxygen sensing, DFSOV flow control, automatic protection, and line-maintenance troubleshooting flow.
+  </footer>
+</body>
+</html>

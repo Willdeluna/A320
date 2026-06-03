@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 21 Main Points</title>
+  <style>
+    :root{--bg:#050505;--panel:#101010;--orange:#ff9f1c;--amber:#ffd27f;--soft:rgba(255,159,28,.18);--line:rgba(255,159,28,.55);--white:#f7efe4;--muted:#bda777;--red:#ff5f56;--blue:#62d8ff;--green:#8cffb1}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:var(--white);background:radial-gradient(circle at 20% 0%,rgba(255,159,28,.22),transparent 28%),radial-gradient(circle at 85% 20%,rgba(98,216,255,.13),transparent 26%),linear-gradient(135deg,#000,#080808 45%,#130b02);overflow-x:hidden}body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,159,28,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,159,28,.045) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(circle at center,black,transparent 82%)}header{max-width:1180px;margin:0 auto;padding:36px 18px 18px;text-align:center;position:relative}.eyebrow{display:inline-flex;gap:8px;align-items:center;color:var(--amber);border:1px solid var(--line);background:rgba(0,0,0,.55);border-radius:999px;padding:8px 14px;box-shadow:0 0 22px var(--soft);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.8rem}h1{margin:18px 0 8px;color:var(--orange);font-size:clamp(2rem,6vw,4.8rem);line-height:.96;text-shadow:0 0 18px rgba(255,159,28,.38),0 0 42px rgba(255,159,28,.16)}.subtitle{max-width:850px;margin:0 auto;color:var(--muted);font-size:1.08rem;line-height:1.55}.hero-strip{max-width:1180px;margin:24px auto 8px;padding:0 18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.hero-card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,159,28,.1),rgba(0,0,0,.72));border-radius:22px;padding:20px;min-height:140px;position:relative;overflow:hidden;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}.hero-card:hover{transform:translateY(-8px) scale(1.015);box-shadow:0 0 34px rgba(255,159,28,.24);border-color:var(--orange)}.hero-card:after{content:"";position:absolute;width:150px;height:150px;right:-58px;bottom:-58px;border:1px solid rgba(255,159,28,.28);border-radius:50%}.hero-icon{font-size:2.2rem;margin-bottom:8px}.hero-title{color:var(--amber);font-size:1.25rem;font-weight:900}.hero-text{color:var(--muted);margin-top:8px;line-height:1.42}main{max-width:1240px;margin:0 auto;padding:22px 18px 48px}.section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.system-section{border:1px solid var(--line);background:rgba(9,9,9,.88);border-radius:24px;padding:18px;box-shadow:0 0 30px rgba(0,0,0,.35);position:relative;overflow:hidden}.system-section:before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,transparent,var(--orange),var(--blue),transparent);opacity:.75}.section-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;position:relative;z-index:1}.section-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;border:1px solid var(--line);background:radial-gradient(circle at top,rgba(255,159,28,.28),rgba(0,0,0,.75));font-size:1.65rem;box-shadow:inset 0 0 18px rgba(255,159,28,.12)}h2{margin:0;color:var(--orange);font-size:1.2rem;letter-spacing:.01em}.cards{display:grid;gap:10px;position:relative;z-index:1}.idea-card{border:1px solid rgba(255,159,28,.28);background:linear-gradient(135deg,rgba(255,159,28,.06),rgba(255,255,255,.02));border-radius:16px;padding:13px 14px;transition:transform .22s ease,box-shadow .22s ease,background .22s ease,border-color .22s ease;cursor:default;position:relative;overflow:hidden}.idea-card:hover{transform:translateX(8px) scale(1.025);border-color:var(--orange);background:linear-gradient(135deg,rgba(255,159,28,.18),rgba(98,216,255,.06));box-shadow:0 0 26px rgba(255,159,28,.21)}.idea-card:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.08),transparent);transform:translateX(-120%);transition:transform .55s ease}.idea-card:hover:after{transform:translateX(120%)}.main-idea{display:block;color:var(--amber);font-weight:900;font-size:1rem;margin-bottom:5px}.arrow{color:var(--orange);font-weight:900;margin-right:4px}.real-world{display:block;color:#ead9b8;line-height:1.42;font-size:.96rem}.tag{display:inline-block;margin-top:8px;color:#111;background:var(--orange);border-radius:999px;padding:3px 8px;font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}.wide{grid-column:1/-1}.memory-map{margin-top:20px;border:1px solid var(--line);border-radius:28px;padding:22px;background:linear-gradient(135deg,rgba(255,159,28,.1),rgba(0,0,0,.72));position:relative;overflow:hidden}.memory-map h2{font-size:1.45rem;margin-bottom:14px}.map-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.map-card{border:1px solid rgba(255,159,28,.38);border-radius:20px;padding:18px;background:rgba(0,0,0,.55);transition:transform .25s ease,box-shadow .25s ease}.map-card:hover{transform:translateY(-7px) rotate(-.5deg);box-shadow:0 0 28px rgba(98,216,255,.16),0 0 34px rgba(255,159,28,.12)}.map-number{color:var(--blue);font-size:2rem;font-weight:900}.map-title{color:var(--amber);font-weight:900;font-size:1.2rem;margin:4px 0 8px}.map-card ul{margin:0;padding-left:18px;color:#ead9b8;line-height:1.65}.fail-list{margin-top:20px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.fail-chip{border:1px solid rgba(255,95,86,.55);background:rgba(255,95,86,.08);color:#ffd6d3;padding:14px;border-radius:16px;font-weight:800;text-align:center;transition:transform .2s ease,background .2s ease}.fail-chip:hover{transform:scale(1.06);background:rgba(255,95,86,.18)}footer{text-align:center;color:var(--muted);padding:26px 18px 38px}@media(max-width:1000px){.map-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:900px){.hero-strip{grid-template-columns:1fr}.section-grid{grid-template-columns:1fr}.fail-list{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){main{padding:18px 10px 34px}header{padding-top:24px}.system-section,.memory-map{border-radius:18px;padding:14px}.map-grid,.fail-list{grid-template-columns:1fr}.idea-card:hover{transform:scale(1.015)}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 21 • Air Conditioning / ECS</div>
+    <h1>ECS Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for A320 packs, ACSC logic, trim air, mixer/distribution, avionics ventilation, cargo ventilation, pressurization, ECAM clues, and practical troubleshooting flow.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card"><div class="hero-icon">🌬️</div><div class="hero-title">Condition Air</div><div class="hero-text">Bleed air is cooled, dried, mixed, trimmed, and sent through the cabin.</div></div>
+    <div class="hero-card"><div class="hero-icon">🧠</div><div class="hero-title">Controller Logic</div><div class="hero-text">ACSC / ZC / PC logic controls pack flow, trim air, ram air, and protections.</div></div>
+    <div class="hero-card"><div class="hero-icon">📊</div><div class="hero-title">ECAM Clues</div><div class="hero-text">BLEED and COND pages together tell the airflow story before parts get blamed.</div></div>
+  </section>
+
+  <main>
+    <section class="section-grid">
+      <div class="system-section"><div class="section-head"><div class="section-icon">🧠</div><h2>Core Concept — What ATA 21 Does</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">ATA 21 = controlled air management</span><span class="real-world"><span class="arrow">→</span>Cooling, heating, ventilation, and pressurization all live here.</span><span class="tag">comfort + safety</span></div>
+        <div class="idea-card"><span class="main-idea">ECS controls the air inside the aircraft</span><span class="real-world"><span class="arrow">→</span>It manages temperature and pressure, not just “air conditioning.”</span></div>
+        <div class="idea-card"><span class="main-idea">Multiple systems work together</span><span class="real-world"><span class="arrow">→</span>Packs, trim air, mixer, ventilation, cargo, avionics, and pressurization are tied together.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🔥</div><h2>Air Supply — Where It Starts</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Air comes from engine bleed, APU bleed, or ground air</span><span class="real-world"><span class="arrow">→</span>The air starts hot and high pressure, then ATA 21 conditions it.</span></div>
+        <div class="idea-card"><span class="main-idea">Bleed problems become ECS problems</span><span class="real-world"><span class="arrow">→</span>A pack complaint can begin upstream in the bleed source.</span><span class="tag">follow airflow</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">⚙️</div><h2>Packs — Core Component</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Two independent packs</span><span class="real-world"><span class="arrow">→</span>Pack 1 is LH, Pack 2 is RH.</span></div>
+        <div class="idea-card"><span class="main-idea">Packs cool bleed air and remove moisture</span><span class="real-world"><span class="arrow">→</span>Think of them as air-cycle air-conditioning units.</span></div>
+        <div class="idea-card"><span class="main-idea">Pack internals include ACM, heat exchangers, reheater, condenser, water extractor</span><span class="real-world"><span class="arrow">→</span>Hot bleed is cooled, compressed, expanded, cooled again, then dried.</span><span class="tag">air cycle</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🚪</div><h2>Flow Control Valve Logic</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">FCV controls airflow into each pack</span><span class="real-world"><span class="arrow">→</span>Controller logic decides how much air the pack receives.</span></div>
+        <div class="idea-card"><span class="main-idea">FCV auto closes for protection</span><span class="real-world"><span class="arrow">→</span>Engine start, overheat, fire pushbutton, and ditching can close it.</span><span class="tag">not always failed</span></div>
+        <div class="idea-card"><span class="main-idea">Most pack “failures” are automatic protections</span><span class="real-world"><span class="arrow">→</span>Check why the valve closed before replacing hardware.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🌡️</div><h2>Temperature Control + Trim Air</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Packs supply the coldest required temperature</span><span class="real-world"><span class="arrow">→</span>The system cools first, then adds heat where needed.</span></div>
+        <div class="idea-card"><span class="main-idea">Trim air fine-tunes zones</span><span class="real-world"><span class="arrow">→</span>Cockpit, forward cabin, and aft cabin each get hot air through trim air valves.</span><span class="tag">big concept</span></div>
+        <div class="idea-card"><span class="main-idea">Hot Air PRV supplies regulated hot air</span><span class="real-world"><span class="arrow">→</span>Zone temperature control depends on this pressure source.</span></div>
+        <div class="idea-card"><span class="main-idea">Trim air faults often mean overheat or overpressure</span><span class="real-world"><span class="arrow">→</span>Look for HOT AIR FAULT or TRIM AIR FAULT logic.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🧠</div><h2>ACSC / Controller Logic</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">ACSC is the ECS decision maker</span><span class="real-world"><span class="arrow">→</span>It controls pack temperature, flow, ram air, and trim air.</span></div>
+        <div class="idea-card"><span class="main-idea">Two ACSCs with dual lanes</span><span class="real-world"><span class="arrow">→</span>Built-in redundancy keeps the system operating after faults.</span></div>
+        <div class="idea-card"><span class="main-idea">ACSC 1 handles cockpit, ACSC 2 handles cabin zones</span><span class="real-world"><span class="arrow">→</span>Zone split helps narrow troubleshooting.</span><span class="tag">zone clue</span></div>
+        <div class="idea-card"><span class="main-idea">Classic vs Enhanced matters</span><span class="real-world"><span class="arrow">→</span>Classic uses ZC/PC logic. Enhanced centralizes that into ACSC.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🔄</div><h2>Mixer + Recirculation</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Mixer unit is the central distribution hub</span><span class="real-world"><span class="arrow">→</span>It blends pack air with recirculated cabin air.</span></div>
+        <div class="idea-card"><span class="main-idea">Recirculation reduces bleed demand</span><span class="real-world"><span class="arrow">→</span>Fans and filters reuse cabin air for efficiency and stable airflow.</span><span class="tag">fuel saver</span></div>
+        <div class="idea-card"><span class="main-idea">Air goes to cockpit, forward cabin, and aft cabin</span><span class="real-world"><span class="arrow">→</span>Duct design prevents drafts and uneven temperatures.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🚨</div><h2>Emergency Ram Air + Pack Overheat</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Emergency ram air is used if both packs fail</span><span class="real-world"><span class="arrow">→</span>It provides ventilation only — not cooling.</span><span class="tag">ventilation only</span></div>
+        <div class="idea-card"><span class="main-idea">Ram air conditions matter</span><span class="real-world"><span class="arrow">→</span>Typically below 10,000 ft and low differential pressure.</span></div>
+        <div class="idea-card"><span class="main-idea">Ram air doors and bypass valve work together</span><span class="real-world"><span class="arrow">→</span>Cooling uses airflow; heating uses bypass/hot air logic.</span></div>
+        <div class="idea-card"><span class="main-idea">Pack overheat creates FAULT logic</span><span class="real-world"><span class="arrow">→</span>Overheat can drive shutdown or ECAM cautions.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">📊</div><h2>ECAM Indications</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Use BLEED page and COND page together</span><span class="real-world"><span class="arrow">→</span>BLEED shows pack valves/flow/temp. COND shows zones, duct temp, and trim air.</span><span class="tag">use both</span></div>
+        <div class="idea-card"><span class="main-idea">Common messages: PACK OVHT, PACK FAULT, HOT AIR FAULT</span><span class="real-world"><span class="arrow">→</span>The message is a clue, not always the failed component.</span></div>
+        <div class="idea-card"><span class="main-idea">TRIM AIR FAULT and CAB FAN FAULT point to system logic</span><span class="real-world"><span class="arrow">→</span>Trace sensors, valves, and controllers before hardware swaps.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🖥️</div><h2>Avionics Ventilation</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">AEVC controls avionics cooling</span><span class="real-world"><span class="arrow">→</span>It uses blower fan, extract fan, and skin heat exchanger logic.</span></div>
+        <div class="idea-card"><span class="main-idea">Modes: open, closed, and intermediate</span><span class="real-world"><span class="arrow">→</span>The system adapts based on flight/ground and temperature.</span></div>
+        <div class="idea-card"><span class="main-idea">Smoke logic is aggressive</span><span class="real-world"><span class="arrow">→</span>If smoke is detected, fans shut off and air is dumped overboard in override mode.</span><span class="tag">safety logic</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">📦</div><h2>Cargo Ventilation + Heating</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Cargo uses cabin air and trim air</span><span class="real-world"><span class="arrow">→</span>It is independent, but still tied to ECS resources.</span></div>
+        <div class="idea-card"><span class="main-idea">Cargo ventilation controller manages operation</span><span class="real-world"><span class="arrow">→</span>Smoke detection or fan failure can stop the system.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🫁</div><h2>Pressurization</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">CPC controls the outflow valve</span><span class="real-world"><span class="arrow">→</span>Pressure is controlled by air leaving the aircraft.</span><span class="tag">big idea</span></div>
+        <div class="idea-card"><span class="main-idea">Automatic and manual modes exist</span><span class="real-world"><span class="arrow">→</span>Manual gives backup control if automatic logic fails.</span></div>
+        <div class="idea-card"><span class="main-idea">Cabin altitude warning and differential pressure limits are safety critical</span><span class="real-world"><span class="arrow">→</span>Pressurization turns ECS into a safety system, not just comfort.</span></div>
+      </div></div>
+
+      <div class="system-section wide"><div class="section-head"><div class="section-icon">🔧</div><h2>Maintenance Reality + Troubleshooting Flow</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Most ATA 21 faults are sensors, valves, or controller logic</span><span class="real-world"><span class="arrow">→</span>Pack hardware failure is less common than bad data or control logic.</span><span class="tag">don’t parts-cannon</span></div>
+        <div class="idea-card"><span class="main-idea">Step 1: Check ECAM BLEED + COND</span><span class="real-world"><span class="arrow">→</span>Identify whether it is flow, temperature, or zone related.</span></div>
+        <div class="idea-card"><span class="main-idea">Step 2: Check pack operation, trim air, sensors, and controller</span><span class="real-world"><span class="arrow">→</span>Follow the sequence: Bleed → Pack → Mixer → Trim → Distribution.</span></div>
+        <div class="idea-card"><span class="main-idea">System is highly automated</span><span class="real-world"><span class="arrow">→</span>Pilot input is limited, so automatic protection logic matters.</span></div>
+      </div></div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Easy Way to Remember A320 ATA 21</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Create Air</div><ul><li>Engine bleed</li><li>APU bleed</li><li>Ground air</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Condition Air</div><ul><li>Packs</li><li>ACM</li><li>Water extraction</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Mix Air</div><ul><li>Mixer unit</li><li>Recirculation fans</li><li>Filters</li></ul></div>
+        <div class="map-card"><div class="map-number">4</div><div class="map-title">Adjust Air</div><ul><li>Trim air</li><li>Zone valves</li><li>Hot Air PRV</li></ul></div>
+        <div class="map-card"><div class="map-number">5</div><div class="map-title">Distribute Air</div><ul><li>Cockpit</li><li>FWD cabin</li><li>AFT cabin</li></ul></div>
+        <div class="map-card"><div class="map-number">6</div><div class="map-title">Protect</div><ul><li>ACSC</li><li>Sensors</li><li>ECAM logic</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Real Line MX Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">PACK FAULT<br><small>check protection logic</small></div>
+        <div class="fail-chip">HOT AIR FAULT<br><small>trim air / PRV logic</small></div>
+        <div class="fail-chip">Zone issue<br><small>sensor or valve clue</small></div>
+        <div class="fail-chip">Use ECAM<br><small>BLEED + COND together</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>A320 ATA 21 quick-study page • ECS airflow, controller logic, ECAM indications, and line-maintenance troubleshooting.</footer>
+</body>
+</html>

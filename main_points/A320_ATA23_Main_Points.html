@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 23 Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,159,28,0.22), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(98,216,255,0.13), transparent 26%),
+        linear-gradient(135deg, #000, #080808 45%, #130b02);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,159,28,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(255,159,28,.16);
+    }
+
+    .subtitle {
+      max-width: 850px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 140px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(255,159,28,.24);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(255,159,28,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.2rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.25rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--orange), var(--blue), transparent);
+      opacity: .75;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(255,159,28,.28), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(255,255,255,.02));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.18), rgba(98,216,255,.06));
+      box-shadow: 0 0 26px rgba(255,159,28,.21);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(98,216,255,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.2rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.65;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1000px) {
+      .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .hero-strip { grid-template-columns: 1fr; }
+      .section-grid { grid-template-columns: 1fr; }
+      .fail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 520px) {
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .system-section, .memory-map { border-radius: 18px; padding: 14px; }
+      .map-grid, .fail-list { grid-template-columns: 1fr; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 23 • Communications</div>
+    <h1>Communications Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for radios, audio routing, interphone, PA, CIDS, ACARS/ATSU, SELCAL, CVR, and the “source → routing → output” troubleshooting flow.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card"><div class="hero-icon">📡</div><div class="hero-title">Radio Communication</div><div class="hero-text">VHF, HF, RMP tuning, antennas, and long-range communication paths.</div></div>
+    <div class="hero-card"><div class="hero-icon">🎧</div><div class="hero-title">Audio Routing</div><div class="hero-text">ACP selections and AMU logic decide who transmits, who hears, and where audio goes.</div></div>
+    <div class="hero-card"><div class="hero-icon">📢</div><div class="hero-title">Cabin + Data</div><div class="hero-text">PA, interphone, CIDS, ACARS, ATSU, SELCAL, and recorder systems connect the airplane.</div></div>
+  </section>
+
+  <main>
+    <section class="section-grid">
+      <div class="system-section"><div class="section-head"><div class="section-icon">🧠</div><h2>Core Concept</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">ATA 23 = all aircraft communication</span><span class="real-world"><span class="arrow">→</span>Voice, audio, data, cabin calls, PA, interphone, and airline messages.</span></div>
+        <div class="idea-card"><span class="main-idea">Communication is a network</span><span class="real-world"><span class="arrow">→</span>Crew to ATC, crew to crew, crew to passengers, and aircraft to airline.</span><span class="tag">big picture</span></div>
+        <div class="idea-card"><span class="main-idea">Troubleshoot by path</span><span class="real-world"><span class="arrow">→</span>Source → routing → output. Don’t parts-cannon a radio before checking routing.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🔄</div><h2>System Architecture</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Basic flow</span><span class="real-world"><span class="arrow">→</span>Microphone → AMU → radio / interphone / PA → headset, speaker, or antenna.</span></div>
+        <div class="idea-card"><span class="main-idea">Multiple communication paths</span><span class="real-world"><span class="arrow">→</span>Radio, interphone, PA, CIDS, ACARS, and ATSU all share logic.</span></div>
+        <div class="idea-card"><span class="main-idea">Most faults are routing faults</span><span class="real-world"><span class="arrow">→</span>Selection, audio path, AMU, or bus data can look like bad hardware.</span><span class="tag">MX clue</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">📻</div><h2>VHF System</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">VHF = primary daily communication</span><span class="real-world"><span class="arrow">→</span>Used for ATC, company, ground, and normal line operations.</span></div>
+        <div class="idea-card"><span class="main-idea">VHF 1, VHF 2, VHF 3</span><span class="real-world"><span class="arrow">→</span>VHF 3 is often used for data link like ACARS / ATSU.</span></div>
+        <div class="idea-card"><span class="main-idea">RMP tunes, ACP routes audio</span><span class="real-world"><span class="arrow">→</span>Frequency problem? Think RMP. Hearing/transmit problem? Think ACP/AMU.</span><span class="tag">don’t mix them up</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🌊</div><h2>HF System</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">HF = oceanic / long range</span><span class="real-world"><span class="arrow">→</span>Used where VHF line-of-sight coverage is not enough.</span></div>
+        <div class="idea-card"><span class="main-idea">Transceiver + coupler + antenna</span><span class="real-world"><span class="arrow">→</span>The coupler tunes the antenna system for the selected frequency.</span></div>
+        <div class="idea-card"><span class="main-idea">HF is noisy by nature</span><span class="real-world"><span class="arrow">→</span>Interference, tuning faults, and antenna issues are common suspects.</span><span class="tag">known headache</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🎛️</div><h2>RMP — Radio Management Panel</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">RMP = tuning head</span><span class="real-world"><span class="arrow">→</span>It controls frequency selection; it is not the actual radio.</span></div>
+        <div class="idea-card"><span class="main-idea">Controls VHF, HF, and backup nav tuning</span><span class="real-world"><span class="arrow">→</span>Any RMP can control radios through reconfiguration logic.</span></div>
+        <div class="idea-card"><span class="main-idea">Blank RMP display</span><span class="real-world"><span class="arrow">→</span>Turn it off for reconfig; system can route control through remaining panels.</span><span class="tag">line trick</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🎚️</div><h2>ACP — Audio Control Panel</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">ACP = audio routing panel</span><span class="real-world"><span class="arrow">→</span>It selects transmit channel, receive channels, volume, PA, and interphone.</span></div>
+        <div class="idea-card"><span class="main-idea">Only one transmit channel at a time</span><span class="real-world"><span class="arrow">→</span>You can listen to several channels, but transmit on one selected source.</span><span class="tag">high value</span></div>
+        <div class="idea-card"><span class="main-idea">Pushbutton vs knob logic</span><span class="real-world"><span class="arrow">→</span>Pushbuttons select transmit. Knobs select and adjust reception.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🧩</div><h2>AMU — Audio Management Unit</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">AMU = traffic controller for audio</span><span class="real-world"><span class="arrow">→</span>Routes microphone inputs, radio outputs, interphone audio, and SELCAL.</span></div>
+        <div class="idea-card"><span class="main-idea">Mic to radio / PA / interphone</span><span class="real-world"><span class="arrow">→</span>Same input can go different places depending on ACP and system logic.</span></div>
+        <div class="idea-card"><span class="main-idea">Radio to headset / speaker</span><span class="real-world"><span class="arrow">→</span>If audio is missing, trace the AMU path before blaming the radio.</span><span class="tag">routing hub</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">☎️</div><h2>Interphone + Ground Call</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Three interphone types</span><span class="real-world"><span class="arrow">→</span>Flight interphone, service interphone, and cabin interphone.</span></div>
+        <div class="idea-card"><span class="main-idea">Service interphone = ground ops</span><span class="real-world"><span class="arrow">→</span>Connects cockpit/cabin with maintenance stations around the aircraft.</span></div>
+        <div class="idea-card"><span class="main-idea">Ground call is loud</span><span class="real-world"><span class="arrow">→</span>Horn and light alert crew. Stand clear when testing near nose gear.</span><span class="tag">safety</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">📢</div><h2>Passenger Address — PA</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">PA sends announcements to cabin speakers</span><span class="real-world"><span class="arrow">→</span>Inputs can come from cockpit, cabin crew, or recorded messages.</span></div>
+        <div class="idea-card"><span class="main-idea">Priority matters</span><span class="real-world"><span class="arrow">→</span>Cockpit overrides cabin crew, recorded messages, and music.</span><span class="tag">priority logic</span></div>
+        <div class="idea-card"><span class="main-idea">Volume adjusts automatically</span><span class="real-world"><span class="arrow">→</span>Engine running and decompression logic increase PA volume.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🏠</div><h2>CIDS — Cabin System</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">CIDS = cabin communication and control</span><span class="real-world"><span class="arrow">→</span>Controls PA, interphone, lighting, passenger signs, and calls.</span></div>
+        <div class="idea-card"><span class="main-idea">Directors provide redundancy</span><span class="real-world"><span class="arrow">→</span>DIR 1 active, DIR 2 standby; auto switch if needed.</span></div>
+        <div class="idea-card"><span class="main-idea">DEUs split cabin functions</span><span class="real-world"><span class="arrow">→</span>Type A handles passenger devices; Type B handles crew/sensor interfaces.</span><span class="tag">partial failures</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🛰️</div><h2>ACARS / ATSU Data Link</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">ACARS = airline data link</span><span class="real-world"><span class="arrow">→</span>Sends OOOI times, maintenance data, and messages, often through VHF 3.</span></div>
+        <div class="idea-card"><span class="main-idea">ATSU = advanced communication router</span><span class="real-world"><span class="arrow">→</span>Handles CPDLC, ADS, and ATC data link functions on newer aircraft.</span></div>
+        <div class="idea-card"><span class="main-idea">Interfaces with many aircraft systems</span><span class="real-world"><span class="arrow">→</span>FMGC, DMU, FWC, and SDAC can all feed data.</span><span class="tag">system-of-systems</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🔔</div><h2>SELCAL + Static Dischargers</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">SELCAL alerts crew to calls</span><span class="real-world"><span class="arrow">→</span>It compares incoming code to the aircraft code and triggers light/buzzer.</span></div>
+        <div class="idea-card"><span class="main-idea">Crew does not need constant listening</span><span class="real-world"><span class="arrow">→</span>Especially useful on HF and long-range communication.</span></div>
+        <div class="idea-card"><span class="main-idea">Static dischargers improve radio clarity</span><span class="real-world"><span class="arrow">→</span>After lightning strikes, inspect them early.</span><span class="tag">MX first look</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🎙️</div><h2>CVR — Cockpit Voice Recorder</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Records cockpit audio</span><span class="real-world"><span class="arrow">→</span>Crew comms, interphone, PA, and ambient cockpit sound.</span></div>
+        <div class="idea-card"><span class="main-idea">Stores the last 2 hours</span><span class="real-world"><span class="arrow">→</span>Used for incident and accident investigation.</span></div>
+      </div></div>
+
+      <div class="system-section"><div class="section-head"><div class="section-icon">🔧</div><h2>Troubleshooting Flow</h2></div><div class="cards">
+        <div class="idea-card"><span class="main-idea">Step 1: identify the system</span><span class="real-world"><span class="arrow">→</span>Radio, PA, interphone, data link, or cabin communication?</span></div>
+        <div class="idea-card"><span class="main-idea">Step 2: check RMP and ACP</span><span class="real-world"><span class="arrow">→</span>Frequency and routing issues are the classics.</span></div>
+        <div class="idea-card"><span class="main-idea">Step 3: trace input to AMU to output</span><span class="real-world"><span class="arrow">→</span>Then check power, antennas, coax, and bus data.</span><span class="tag">source → routing → output</span></div>
+      </div></div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Easy Way to Remember ATA 23</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Tune</div><ul><li>RMP</li><li>VHF / HF</li><li>Frequency</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Route</div><ul><li>ACP</li><li>AMU</li><li>Audio path</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Broadcast</div><ul><li>Radio</li><li>PA</li><li>Interphone</li></ul></div>
+        <div class="map-card"><div class="map-number">4</div><div class="map-title">Send Data</div><ul><li>ACARS</li><li>ATSU</li><li>SELCAL</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Real Line MX Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">No transmit<br><small>check ACP selection</small></div>
+        <div class="fail-chip">Wrong frequency<br><small>check RMP logic</small></div>
+        <div class="fail-chip">No audio<br><small>trace AMU routing</small></div>
+        <div class="fail-chip">Radio noise<br><small>antenna / static dischargers</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>A320 ATA 23 quick-study page • Radios, audio routing, cabin communication, and data link troubleshooting.</footer>
+</body>
+</html>

@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 49 APU Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+      --heat: #ff6b35;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(255,107,53,0.25), transparent 30%),
+        radial-gradient(circle at 88% 18%, rgba(255,159,28,0.21), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(98,216,255,0.09), transparent 36%),
+        linear-gradient(135deg, #000, #070707 45%, #190904);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,107,53,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(255,107,53,.18);
+    }
+
+    .subtitle {
+      max-width: 940px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,107,53,.10), rgba(0,0,0,.74));
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 142px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(255,107,53,.20), 0 0 24px rgba(255,159,28,.16);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(255,159,28,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.1rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.15rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; font-size: .95rem; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .master-flow {
+      margin-bottom: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,107,53,.12), rgba(0,0,0,.72));
+    }
+
+    .master-flow h2 {
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .flow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      flex: 1 1 155px;
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(0,0,0,.55);
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .flow-step:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(255,107,53,.17);
+    }
+
+    .flow-step strong {
+      color: var(--amber);
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .flow-step span {
+      color: #ead9b8;
+      display: block;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .three-pack {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .pack-card {
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.68);
+      border-radius: 22px;
+      padding: 18px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .pack-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 0 28px rgba(255,159,28,.20);
+    }
+
+    .pack-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+
+    .pack-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.7;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--heat), var(--orange), var(--blue), transparent);
+      opacity: .82;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(255,107,53,.28), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(255,107,53,.035));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.17), rgba(255,107,53,.10));
+      box-shadow: 0 0 26px rgba(255,107,53,.18), 0 0 20px rgba(255,159,28,.15);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .danger-box {
+      border: 1px solid rgba(255,95,86,.65);
+      background: linear-gradient(135deg, rgba(255,95,86,.13), rgba(0,0,0,.72));
+    }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(255,107,53,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.1rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.6;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    .fail-chip small {
+      display: block;
+      margin-top: 5px;
+      color: #ffc8c4;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 1000px) {
+      .section-grid, .three-pack { grid-template-columns: 1fr; }
+      .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .fail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .hero-strip, .map-grid, .fail-list { grid-template-columns: 1fr; }
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .system-section, .memory-map, .master-flow, .pack-card { border-radius: 18px; padding: 14px; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 49 • Auxiliary Power Unit</div>
+    <h1>APU Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for APU core operation, ECB logic, RPM-based start sequence, fuel control, oil protection, load compressor, IGV/SCV/LCV, generator output, ECAM APU indications, and protective shutdown troubleshooting.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card">
+      <div class="hero-icon">🔥</div>
+      <div class="hero-title">Gas Turbine</div>
+      <div class="hero-text">The APU is a self-contained auxiliary engine, not just a power box.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">⚡</div>
+      <div class="hero-title">Electrical Power</div>
+      <div class="hero-text">The APU generator supplies aircraft electrical power and has priority over bleed load.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🌬️</div>
+      <div class="hero-title">Bleed Air</div>
+      <div class="hero-text">The load compressor provides pneumatic air for engine start and air conditioning.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🧠</div>
+      <div class="hero-title">ECB Control</div>
+      <div class="hero-text">The Electronic Control Box acts like APU FADEC and controls everything.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🛡️</div>
+      <div class="hero-title">Protection</div>
+      <div class="hero-text">Most APU shutdowns are protective logic actions, not destroyed-engine events.</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="master-flow">
+      <h2>🧠 ATA 49 Master Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>Fuel + Air</strong><span>Fuel and air enter the APU core.</span></div>
+        <div class="flow-step"><strong>Combustion</strong><span>Ignition starts combustion during the start sequence.</span></div>
+        <div class="flow-step"><strong>Turbine</strong><span>The turbine drives compressor, load compressor, and gearbox.</span></div>
+        <div class="flow-step"><strong>Outputs</strong><span>Electrical power and pneumatic bleed air.</span></div>
+        <div class="flow-step"><strong>ECB</strong><span>Sensors feed logic; ECB commands fuel, valves, start, and shutdown.</span></div>
+      </div>
+    </section>
+
+    <section class="three-pack">
+      <div class="pack-card">
+        <div class="pack-title">🔥 Core Engine</div>
+        <ul>
+          <li>Centrifugal compressor.</li>
+          <li>Reverse-flow annular combustor.</li>
+          <li>Turbine drives the whole system.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">🧠 Control</div>
+        <ul>
+          <li>ECB controls start, fuel, speed, IGV, valves, and shutdown.</li>
+          <li>BITE and fault storage support maintenance.</li>
+          <li>Sensor-driven logic controls operation.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">⚡ Outputs</div>
+        <ul>
+          <li>Generator supplies aircraft electrical power.</li>
+          <li>Load compressor supplies bleed air.</li>
+          <li>Electrical power has priority over pneumatic load.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section-grid">
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Core Concept</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">APU = self-contained auxiliary gas turbine</span><span class="real-world"><span class="arrow">→</span>It produces electrical power and pneumatic bleed air for the aircraft.</span><span class="tag">big idea</span></div>
+          <div class="idea-card"><span class="main-idea">Complete engine system</span><span class="real-world"><span class="arrow">→</span>It has its own control, fuel, oil, air, start, ignition, and protection logic.</span></div>
+          <div class="idea-card"><span class="main-idea">Single shaft drives everything</span><span class="real-world"><span class="arrow">→</span>The turbine powers compressor, load compressor, generator, and accessory gearbox.</span><span class="tag">one shaft</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧩</div><h2>System Architecture</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Three big sections</span><span class="real-world"><span class="arrow">→</span>Power section, load compressor, and accessory gearbox.</span></div>
+          <div class="idea-card"><span class="main-idea">Power section is the core engine</span><span class="real-world"><span class="arrow">→</span>Air compression, combustion, and turbine power happen here.</span></div>
+          <div class="idea-card"><span class="main-idea">Load compressor makes bleed air</span><span class="real-world"><span class="arrow">→</span>Separate from the core compressor, it supplies aircraft pneumatic users.</span></div>
+          <div class="idea-card"><span class="main-idea">Accessory gearbox distributes mechanical power</span><span class="real-world"><span class="arrow">→</span>It drives fuel, oil, generator functions and integrates the oil reservoir.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚡</div><h2>System Purpose</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Electrical power source</span><span class="real-world"><span class="arrow">→</span>The APU generator can supply aircraft electrical power on ground or as backup.</span></div>
+          <div class="idea-card"><span class="main-idea">Bleed air source</span><span class="real-world"><span class="arrow">→</span>APU bleed supports engine start, air conditioning, and backup pneumatic supply.</span></div>
+          <div class="idea-card"><span class="main-idea">Electrical power has priority</span><span class="real-world"><span class="arrow">→</span>If load must be managed, electrical output is prioritized over pneumatic bleed load.</span><span class="tag">priority</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔥</div><h2>APU Engine Core</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Centrifugal compressor</span><span class="real-world"><span class="arrow">→</span>Compresses air for the combustion process.</span></div>
+          <div class="idea-card"><span class="main-idea">Reverse-flow annular combustor</span><span class="real-world"><span class="arrow">→</span>Burns fuel/air mixture to create turbine-driving energy.</span></div>
+          <div class="idea-card"><span class="main-idea">Turbine drives the system</span><span class="real-world"><span class="arrow">→</span>Turbine energy drives the compressor, load compressor, and gearbox.</span><span class="tag">power source</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚙️</div><h2>Accessory Gearbox</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Power distribution hub</span><span class="real-world"><span class="arrow">→</span>The gearbox mechanically drives fuel, oil, and generator-related systems.</span><span class="tag">gearbox = hub</span></div>
+          <div class="idea-card"><span class="main-idea">Oil reservoir integration</span><span class="real-world"><span class="arrow">→</span>The gearbox also houses or integrates the APU oil reservoir.</span></div>
+          <div class="idea-card"><span class="main-idea">Gearbox faults can affect multiple systems</span><span class="real-world"><span class="arrow">→</span>Fuel, oil, and generator issues can trace back to gearbox-driven functions.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>ECB — APU Brain</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">ECB acts like APU FADEC</span><span class="real-world"><span class="arrow">→</span>It controls start sequence, fuel flow, speed, IGV, valves, and shutdown.</span><span class="tag">controls everything</span></div>
+          <div class="idea-card"><span class="main-idea">Sensor-driven logic</span><span class="real-world"><span class="arrow">→</span>Pressure, temperature, speed, and aircraft signals feed ECB decisions.</span></div>
+          <div class="idea-card"><span class="main-idea">BITE and fault storage</span><span class="real-world"><span class="arrow">→</span>ECB stores faults and supports maintenance troubleshooting through CFDS/MCDU.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🚀</div><h2>APU Start Sequence</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Start is RPM-based</span><span class="real-world"><span class="arrow">→</span>Each start event happens at specific APU speed milestones.</span><span class="tag">very important</span></div>
+          <div class="idea-card"><span class="main-idea">Typical sequence</span><span class="real-world"><span class="arrow">→</span>Starter ON → fuel/ignition ON → acceleration → starter OFF → ignition OFF → APU AVAIL.</span></div>
+          <div class="idea-card"><span class="main-idea">Every step depends on RPM</span><span class="real-world"><span class="arrow">→</span>No acceleration or wrong speed feedback can stop the sequence and create shutdown logic.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔋</div><h2>Starting System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Starter accelerates to self-sustaining speed</span><span class="real-world"><span class="arrow">→</span>The starter motor, contactors, and clutch get the APU rotating for lightoff.</span></div>
+          <div class="idea-card"><span class="main-idea">Starter disengages automatically</span><span class="real-world"><span class="arrow">→</span>Once the APU accelerates enough, the ECB commands starter disengagement.</span><span class="tag">auto cutout</span></div>
+          <div class="idea-card"><span class="main-idea">Starter faults create no-start or slow-start symptoms</span><span class="real-world"><span class="arrow">→</span>Check power, contactors, clutch, and speed feedback.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚡</div><h2>Ignition System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Ignition only needed during start</span><span class="real-world"><span class="arrow">→</span>After flame becomes self-sustaining, ignition is no longer required.</span><span class="tag">start only</span></div>
+          <div class="idea-card"><span class="main-idea">ECB controls ignition</span><span class="real-world"><span class="arrow">→</span>The ignition unit and igniter plug are commanded during the start window.</span></div>
+          <div class="idea-card"><span class="main-idea">No flame triggers protection</span><span class="real-world"><span class="arrow">→</span>If ignition/fuel/air do not produce flame, the ECB shuts the APU down.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⛽</div><h2>Fuel System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Fuel flow controls engine speed</span><span class="real-world"><span class="arrow">→</span>The ECB meters fuel through the FCU to control acceleration and running speed.</span><span class="tag">speed control</span></div>
+          <div class="idea-card"><span class="main-idea">Flow path</span><span class="real-world"><span class="arrow">→</span>Aircraft fuel → FCU → flow divider → nozzles.</span></div>
+          <div class="idea-card"><span class="main-idea">Primary and secondary fuel logic</span><span class="real-world"><span class="arrow">→</span>Fuel scheduling changes between starting and acceleration/running phases.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🎛️</div><h2>FCU & Flow Divider</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">FCU meters fuel</span><span class="real-world"><span class="arrow">→</span>Fuel pump, filters, and torque motor valve respond to ECB command.</span><span class="tag">critical</span></div>
+          <div class="idea-card"><span class="main-idea">Flow divider splits fuel</span><span class="real-world"><span class="arrow">→</span>It routes fuel between primary and secondary paths for start and acceleration.</span></div>
+          <div class="idea-card"><span class="main-idea">Flow divider faults affect starts</span><span class="real-world"><span class="arrow">→</span>Hung start, no start, or poor acceleration can point to flow divider/check valve issues.</span><span class="tag">MX clue</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛢️</div><h2>Oil System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Oil protects the APU engine</span><span class="real-world"><span class="arrow">→</span>Lubrication, cooling, and wear detection protect gears, bearings, and rotating parts.</span><span class="tag">critical</span></div>
+          <div class="idea-card"><span class="main-idea">Main components</span><span class="real-world"><span class="arrow">→</span>Reservoir, lube module, filters, oil cooler, sensors, and chip/wear monitoring.</span></div>
+          <div class="idea-card"><span class="main-idea">Oil faults cause protective shutdown</span><span class="real-world"><span class="arrow">→</span>Low pressure, high temperature, or low level can make the ECB shut the APU down.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section danger-box">
+        <div class="section-head"><div class="section-icon">🛡️</div><h2>Oil Protection Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Oil failure means shutdown</span><span class="real-world"><span class="arrow">→</span>The APU cannot safely run without correct oil pressure, temperature, and quantity.</span><span class="tag">protective</span></div>
+          <div class="idea-card"><span class="main-idea">ECB monitors oil system</span><span class="real-world"><span class="arrow">→</span>Oil sensors feed shutdown and fault logic.</span></div>
+          <div class="idea-card"><span class="main-idea">Protective shutdown is not optional</span><span class="real-world"><span class="arrow">→</span>Protection overrides load demand to prevent engine damage.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🌬️</div><h2>APU Air System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Load compressor produces bleed air</span><span class="real-world"><span class="arrow">→</span>APU pneumatic output is generated by the load compressor.</span></div>
+          <div class="idea-card"><span class="main-idea">IGV controls airflow</span><span class="real-world"><span class="arrow">→</span>Inlet guide vanes adjust airflow into the compressor based on demand.</span><span class="tag">demand control</span></div>
+          <div class="idea-card"><span class="main-idea">Load control valve controls bleed output</span><span class="real-world"><span class="arrow">→</span>LCV opens when APU is available and bleed is selected.</span></div>
+          <div class="idea-card"><span class="main-idea">Surge control valve prevents compressor stall</span><span class="real-world"><span class="arrow">→</span>SCV protects airflow stability, especially when load conditions change.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚠️</div><h2>Surge Control Valve</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Prevents compressor surge/stall</span><span class="real-world"><span class="arrow">→</span>The SCV helps keep the load compressor stable when airflow is low or changing.</span><span class="tag">critical</span></div>
+          <div class="idea-card"><span class="main-idea">Fail-safe open</span><span class="real-world"><span class="arrow">→</span>Open position protects the compressor from damaging surge conditions.</span></div>
+          <div class="idea-card"><span class="main-idea">Air faults can be valve/IGV faults</span><span class="real-world"><span class="arrow">→</span>No bleed or poor bleed can be LCV, IGV, SCV, or ECB command logic.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚡</div><h2>Electrical Output</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">APU generator supplies aircraft power</span><span class="real-world"><span class="arrow">→</span>Look at voltage, frequency, load percentage, and AVAIL status.</span><span class="tag">primary output</span></div>
+          <div class="idea-card"><span class="main-idea">Electrical priority over pneumatic</span><span class="real-world"><span class="arrow">→</span>The system protects electrical output before allowing excessive bleed load.</span></div>
+          <div class="idea-card"><span class="main-idea">Generator faults may not be core faults</span><span class="real-world"><span class="arrow">→</span>Check generator, control, load, and indications before blaming the APU engine.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🚪</div><h2>Inlet System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Air intake flap opens with MASTER ON</span><span class="real-world"><span class="arrow">→</span>The APU needs inlet airflow before start is allowed.</span></div>
+          <div class="idea-card"><span class="main-idea">Must be open for start</span><span class="real-world"><span class="arrow">→</span>If the flap is not open or feedback is invalid, start protection can stop the APU.</span><span class="tag">FLAP NOT OPEN</span></div>
+          <div class="idea-card"><span class="main-idea">Check actuator and feedback</span><span class="real-world"><span class="arrow">→</span>Inlet faults can be command, actuator, sensor, or ECB logic.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section danger-box">
+        <div class="section-head"><div class="section-icon">🛑</div><h2>Protective Shutdown Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Protection overrides everything</span><span class="real-world"><span class="arrow">→</span>Overspeed, overtemp, low oil pressure, no flame, no acceleration, reverse flow, or sensor failures can shut it down.</span><span class="tag">critical</span></div>
+          <div class="idea-card"><span class="main-idea">Immediate shutdown can skip cooldown</span><span class="real-world"><span class="arrow">→</span>Serious protection faults shut down immediately to protect the aircraft/APU.</span></div>
+          <div class="idea-card"><span class="main-idea">Common shutdown does not mean core failure</span><span class="real-world"><span class="arrow">→</span>Many shutdowns are sensor, control, fuel, oil, or valve logic actions.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧊</div><h2>Normal Shutdown Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Remove load first</span><span class="real-world"><span class="arrow">→</span>Normal shutdown unloads the APU before fuel is cut off.</span></div>
+          <div class="idea-card"><span class="main-idea">Cooldown protects turbine</span><span class="real-world"><span class="arrow">→</span>If bleed was used, cooldown helps prevent heat damage.</span><span class="tag">heat protection</span></div>
+          <div class="idea-card"><span class="main-idea">Fuel off ends operation</span><span class="real-world"><span class="arrow">→</span>After cooldown/unload logic, the ECB shuts off fuel and stops the APU.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📊</div><h2>ECAM APU Page</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Primary troubleshooting page</span><span class="real-world"><span class="arrow">→</span>APU page shows speed, EGT, bleed pressure, generator load, and AVAIL status.</span><span class="tag">start here</span></div>
+          <div class="idea-card"><span class="main-idea">Identify the phase</span><span class="real-world"><span class="arrow">→</span>Was the problem during start, running, load application, or shutdown?</span></div>
+          <div class="idea-card"><span class="main-idea">Use CFDS/MCDU history</span><span class="real-world"><span class="arrow">→</span>Last-leg faults and BITE data help separate sensor logic from actual mechanical faults.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section wide">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>Common Failures & Line Reality</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Common fault sources</span><span class="real-world"><span class="arrow">→</span>Temperature, pressure, and speed sensors; fuel system faults; starter issues; ECB faults; valves and actuators.</span></div>
+          <div class="idea-card"><span class="main-idea">Core engine failure is less common</span><span class="real-world"><span class="arrow">→</span>Most APU write-ups are control, sensor, fuel, oil, or protection logic before true core failure.</span><span class="tag">line MX gold</span></div>
+          <div class="idea-card"><span class="main-idea">Troubleshoot by phase</span><span class="real-world"><span class="arrow">→</span>No start, hung start, shutdown, no bleed, no generator power, or no AVAIL all point down different paths.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="master-flow" style="margin-top:20px;">
+      <h2>🔧 Pro Troubleshooting Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>1. ECAM APU</strong><span>Check N%, EGT, bleed pressure, generator load, AVAIL.</span></div>
+        <div class="flow-step"><strong>2. Identify Phase</strong><span>Start, acceleration, running, load application, or shutdown.</span></div>
+        <div class="flow-step"><strong>3. Fuel</strong><span>FCU, flow divider, nozzles, fuel command, and lightoff.</span></div>
+        <div class="flow-step"><strong>4. Air</strong><span>Inlet flap, IGV, load compressor, SCV, LCV, bleed demand.</span></div>
+        <div class="flow-step"><strong>5. Oil</strong><span>Pressure, temperature, level, filters, and oil shutdown logic.</span></div>
+        <div class="flow-step"><strong>6. Control</strong><span>Sensors, ECB, BITE/CFDS, protection cause.</span></div>
+      </div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Master Simplified Model</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Core Operation</div><ul><li>Fuel</li><li>Air</li><li>Combustion</li><li>Turbine power</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Control Loop</div><ul><li>Sensors</li><li>ECB</li><li>Commands</li><li>Engine response</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Output</div><ul><li>Electrical power</li><li>Bleed air</li><li>Protection</li><li>ECAM/CFDS</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Final Most Important Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">APU<small>complete gas turbine</small></div>
+        <div class="fail-chip">ECB<small>controls everything</small></div>
+        <div class="fail-chip">Start<small>RPM-based</small></div>
+        <div class="fail-chip">Fuel<small>controls speed</small></div>
+        <div class="fail-chip">Oil<small>critical protection</small></div>
+        <div class="fail-chip">Air system<small>IGV/SCV/LCV</small></div>
+        <div class="fail-chip">Electrical<small>priority over bleed</small></div>
+        <div class="fail-chip">Most faults<small>sensor/control</small></div>
+        <div class="fail-chip">Shutdowns<small>often protective</small></div>
+        <div class="fail-chip">ECAM APU<small>main tool</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    A320 ATA 49 quick-study page • APU core engine, ECB control, start sequence, fuel/oil/air systems, generator/bleed output, protective shutdowns, and line-maintenance troubleshooting flow.
+  </footer>
+</body>
+</html>

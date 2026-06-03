@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 29 Hydraulics Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+      --yellow: #ffe66d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(255,159,28,0.24), transparent 30%),
+        radial-gradient(circle at 86% 15%, rgba(98,216,255,0.17), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(140,255,177,0.10), transparent 38%),
+        linear-gradient(135deg, #000, #080808 45%, #130b02);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,159,28,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(98,216,255,.16);
+    }
+
+    .subtitle {
+      max-width: 900px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 140px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(255,159,28,.22), 0 0 22px rgba(98,216,255,.11);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(255,159,28,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.1rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.15rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; font-size: .95rem; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .system-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .system-badge {
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.68);
+      border-radius: 22px;
+      padding: 18px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .system-badge:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 0 28px rgba(255,159,28,.20);
+    }
+
+    .green { border-color: rgba(140,255,177,.7); }
+    .yellow { border-color: rgba(255,230,109,.7); }
+    .blue { border-color: rgba(98,216,255,.7); }
+
+    .system-name {
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .green .system-name { color: var(--green); }
+    .yellow .system-name { color: var(--yellow); }
+    .blue .system-name { color: var(--blue); }
+
+    .system-badge ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.7;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--green), var(--yellow), var(--blue), transparent);
+      opacity: .8;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(255,159,28,.28), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(255,255,255,.02));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.18), rgba(98,216,255,.06));
+      box-shadow: 0 0 26px rgba(255,159,28,.21);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .flow-strip {
+      margin: 20px 0;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+    }
+
+    .flow-title {
+      color: var(--orange);
+      font-weight: 900;
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .flow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      flex: 1 1 160px;
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(0,0,0,.55);
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .flow-step:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(98,216,255,.15);
+    }
+
+    .flow-step strong {
+      color: var(--amber);
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .flow-step span {
+      color: #ead9b8;
+      display: block;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(98,216,255,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.1rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.6;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    .fail-chip small {
+      display: block;
+      margin-top: 5px;
+      color: #ffc8c4;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-strip, .map-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 920px) {
+      .section-grid, .system-row { grid-template-columns: 1fr; }
+      .hero-strip, .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .hero-strip, .map-grid, .fail-list { grid-template-columns: 1fr; }
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .system-section, .memory-map, .flow-strip { border-radius: 18px; padding: 14px; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 29 • Hydraulics</div>
+    <h1>Hydraulic Power Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for Green, Yellow, and Blue hydraulic systems, pumps, PTU, RAT, reservoirs, accumulators, priority valves, ECAM clues, and real-world troubleshooting flow.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card">
+      <div class="hero-icon">💪</div>
+      <div class="hero-title">Generate Force</div>
+      <div class="hero-text">Pumps create about 3000 psi to turn fluid pressure into mechanical movement.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🟢</div>
+      <div class="hero-title">Green System</div>
+      <div class="hero-text">Powered mainly by Engine 1 EDP, with PTU backup from the Yellow side.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🟡</div>
+      <div class="hero-title">Yellow System</div>
+      <div class="hero-text">Powered by Engine 2 EDP, electric pump, and PTU backup.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🔵</div>
+      <div class="hero-title">Blue System</div>
+      <div class="hero-text">Powered by electric pump normally, and RAT during emergency operation.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🧠</div>
+      <div class="hero-title">Troubleshoot</div>
+      <div class="hero-text">Start with ECAM: pressure, quantity, temperature, pump status, and PTU behavior.</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="system-row">
+      <div class="system-badge green">
+        <div class="system-name">GREEN</div>
+        <ul>
+          <li>Engine 1 driven pump is primary.</li>
+          <li>PTU can provide backup power.</li>
+          <li>No fluid mixing with Yellow.</li>
+        </ul>
+      </div>
+      <div class="system-badge yellow">
+        <div class="system-name">YELLOW</div>
+        <ul>
+          <li>Engine 2 driven pump is primary.</li>
+          <li>Electric pump supports backup and ground ops.</li>
+          <li>Often involved with cargo door operation.</li>
+        </ul>
+      </div>
+      <div class="system-badge blue">
+        <div class="system-name">BLUE</div>
+        <ul>
+          <li>Electric pump is main source.</li>
+          <li>RAT is emergency backup source.</li>
+          <li>Emergency hydraulic and electrical support.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section-grid">
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Core Concept</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Hydraulics = force system</span><span class="real-world"><span class="arrow">→</span>ATA 29 transmits power using pressurized fluid, not just fluid flow.</span><span class="tag">big idea</span></div>
+          <div class="idea-card"><span class="main-idea">Fluid pressure becomes movement</span><span class="real-world"><span class="arrow">→</span>Pressure moves actuators, brakes, gear, steering, and flight controls.</span></div>
+          <div class="idea-card"><span class="main-idea">Think pressure path</span><span class="real-world"><span class="arrow">→</span>Pump → pressure → manifold → user → return.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🟢</div><h2>System Architecture</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Three independent systems</span><span class="real-world"><span class="arrow">→</span>Green, Yellow, and Blue systems provide redundancy.</span></div>
+          <div class="idea-card"><span class="main-idea">No fluid mixing</span><span class="real-world"><span class="arrow">→</span>Systems are independent. The PTU transfers power, not fluid.</span><span class="tag">exam point</span></div>
+          <div class="idea-card"><span class="main-idea">Normal pressure is about 3000 psi</span><span class="real-world"><span class="arrow">→</span>Pressure is the main indicator of hydraulic system health.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚙️</div><h2>Power Sources</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Green: Engine 1 EDP</span><span class="real-world"><span class="arrow">→</span>Primary source is ENG 1 engine-driven pump, with PTU backup.</span></div>
+          <div class="idea-card"><span class="main-idea">Yellow: Engine 2 EDP + electric pump</span><span class="real-world"><span class="arrow">→</span>Yellow has strong backup and ground-operation capability.</span></div>
+          <div class="idea-card"><span class="main-idea">Blue: electric pump + RAT</span><span class="real-world"><span class="arrow">→</span>Blue system is electrically powered and emergency-capable through RAT.</span><span class="tag">true redundancy</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔁</div><h2>PTU — Power Transfer Unit</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Transfers power, not fluid</span><span class="real-world"><span class="arrow">→</span>Green and Yellow stay hydraulically separate while sharing mechanical power.</span><span class="tag">huge</span></div>
+          <div class="idea-card"><span class="main-idea">Activates with pressure difference</span><span class="real-world"><span class="arrow">→</span>About 500 psi differential can trigger PTU operation.</span></div>
+          <div class="idea-card"><span class="main-idea">Works both directions</span><span class="real-world"><span class="arrow">→</span>Green can help Yellow, and Yellow can help Green.</span></div>
+          <div class="idea-card"><span class="main-idea">Barking dog sound can be normal</span><span class="real-world"><span class="arrow">→</span>PTU noise alone does not mean a fault.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🪂</div><h2>RAT — Emergency Source</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">RAT is last-resort power</span><span class="real-world"><span class="arrow">→</span>It supplies Blue hydraulic pressure and emergency electrical power.</span><span class="tag">last resort</span></div>
+          <div class="idea-card"><span class="main-idea">Spring deployed</span><span class="real-world"><span class="arrow">→</span>It can deploy when commanded, so treat the area with respect.</span></div>
+          <div class="idea-card"><span class="main-idea">Ground retraction only</span><span class="real-world"><span class="arrow">→</span>Retraction is hydraulic and done on the ground.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">✈️</div><h2>Hydraulic Users</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Hydraulics power major loads</span><span class="real-world"><span class="arrow">→</span>Flight controls, brakes, landing gear, steering, and thrust reversers.</span></div>
+          <div class="idea-card"><span class="main-idea">Loads are distributed</span><span class="real-world"><span class="arrow">→</span>No single system carries every critical load by itself.</span></div>
+          <div class="idea-card"><span class="main-idea">Priority valves protect flight controls</span><span class="real-world"><span class="arrow">→</span>During low pressure, non-essential loads can be shut off first.</span><span class="tag">priority logic</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛢️</div><h2>Reservoirs</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Reservoirs store fluid</span><span class="real-world"><span class="arrow">→</span>They provide quantity indication and low-level warning.</span></div>
+          <div class="idea-card"><span class="main-idea">Reservoirs are pressurized</span><span class="real-world"><span class="arrow">→</span>Air pressure helps prevent pump cavitation.</span></div>
+          <div class="idea-card"><span class="main-idea">Air pressure matters</span><span class="real-world"><span class="arrow">→</span>Low air pressure can be just as important as low fluid quantity.</span><span class="tag">MX clue</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚙️</div><h2>Pumps</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">EDPs are primary sources</span><span class="real-world"><span class="arrow">→</span>Engine-driven pumps create the main pressure for Green and Yellow.</span></div>
+          <div class="idea-card"><span class="main-idea">Electric pumps support backup and ground ops</span><span class="real-world"><span class="arrow">→</span>Yellow and Blue electric pumps provide non-engine hydraulic power.</span></div>
+          <div class="idea-card"><span class="main-idea">Pump output matches demand</span><span class="real-world"><span class="arrow">→</span>Variable displacement pumps adjust output instead of blasting full flow all the time.</span></div>
+          <div class="idea-card"><span class="main-idea">Pump protection matters</span><span class="real-world"><span class="arrow">→</span>Overheat can shut a pump down. Low pressure creates ECAM warning logic.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔋</div><h2>Accumulators</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Hydraulic battery</span><span class="real-world"><span class="arrow">→</span>Accumulators smooth pressure and provide short-term power.</span></div>
+          <div class="idea-card"><span class="main-idea">Nitrogen pre-charge</span><span class="real-world"><span class="arrow">→</span>The gas side stores energy so pressure can be released quickly when needed.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧩</div><h2>Manifolds, Filters & Valves</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Manifolds are system hubs</span><span class="real-world"><span class="arrow">→</span>HP manifolds distribute pressure. LP manifolds return fluid.</span></div>
+          <div class="idea-card"><span class="main-idea">Filters protect the system</span><span class="real-world"><span class="arrow">→</span>HP and return filters catch contamination before it spreads.</span></div>
+          <div class="idea-card"><span class="main-idea">Relief valves protect from overpressure</span><span class="real-world"><span class="arrow">→</span>Check valves prevent reverse flow and relief valves prevent damage.</span></div>
+          <div class="idea-card"><span class="main-idea">Clog indicators are early warnings</span><span class="real-world"><span class="arrow">→</span>Do not ignore filter bypass or clog indications.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🌡️</div><h2>Monitoring</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Pressure is the main health clue</span><span class="real-world"><span class="arrow">→</span>Low pressure drives ECAM and MASTER CAUT logic.</span><span class="tag">primary clue</span></div>
+          <div class="idea-card"><span class="main-idea">Temperature protects the system</span><span class="real-world"><span class="arrow">→</span>Overheat can damage fluid, seals, pumps, and components.</span></div>
+          <div class="idea-card"><span class="main-idea">Leak measurement helps maintenance</span><span class="real-world"><span class="arrow">→</span>Useful for isolating flight-control sections during leak troubleshooting.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📊</div><h2>ECAM Indications</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">HYD ECAM page is the first stop</span><span class="real-world"><span class="arrow">→</span>Look at pressure, quantity, temperature, pumps, and reservoir status.</span><span class="tag">start here</span></div>
+          <div class="idea-card"><span class="main-idea">Common messages</span><span class="real-world"><span class="arrow">→</span>SYS LO PR, RSVR LO LVL, and OVHT are key warnings.</span></div>
+          <div class="idea-card"><span class="main-idea">Warnings may be phase-inhibited</span><span class="real-world"><span class="arrow">→</span>Some warning behavior changes during high-workload phases like takeoff.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section wide">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>Maintenance Reality</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Most faults are indications or pump logic</span><span class="real-world"><span class="arrow">→</span>Sensors, pressure/temp indications, pumps, reservoirs, and filters are common repeat-write-up areas.</span></div>
+          <div class="idea-card"><span class="main-idea">Yellow electric pump has special logic</span><span class="real-world"><span class="arrow">→</span>Cargo door operation can affect hydraulic logic and isolate flight controls.</span></div>
+          <div class="idea-card"><span class="main-idea">Always identify the system first</span><span class="real-world"><span class="arrow">→</span>Green, Yellow, or Blue determines the pressure source, users, backup path, and likely fault path.</span><span class="tag">line MX mindset</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="flow-strip">
+      <div class="flow-title">🔧 Troubleshooting Flow</div>
+      <div class="flow">
+        <div class="flow-step"><strong>1. ECAM HYD</strong><span>Check pressure, quantity, temp, and pump status.</span></div>
+        <div class="flow-step"><strong>2. Identify System</strong><span>Green, Yellow, or Blue — do not troubleshoot blind.</span></div>
+        <div class="flow-step"><strong>3. Check Source</strong><span>EDP, electric pump, PTU, or RAT path.</span></div>
+        <div class="flow-step"><strong>4. Follow Pressure</strong><span>Source → manifold → user → return.</span></div>
+        <div class="flow-step"><strong>5. Verify Protection</strong><span>Priority valves, filters, relief/check valves, and leak isolation.</span></div>
+      </div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Easy Way to Remember ATA 29</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Generate Pressure</div><ul><li>EDPs</li><li>Electric pumps</li><li>RAT backup</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Store Fluid</div><ul><li>Reservoirs</li><li>Pressurization</li><li>Quantity sensing</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Distribute</div><ul><li>Manifolds</li><li>Valves</li><li>PTU power transfer</li></ul></div>
+        <div class="map-card"><div class="map-number">4</div><div class="map-title">Use Power</div><ul><li>Flight controls</li><li>Gear / brakes</li><li>Steering / reversers</li></ul></div>
+        <div class="map-card"><div class="map-number">5</div><div class="map-title">Protect</div><ul><li>Priority valves</li><li>Filters</li><li>Sensors / ECAM</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Real Line MX Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">3 systems<small>Green / Yellow / Blue</small></div>
+        <div class="fail-chip">PTU<small>power, not fluid</small></div>
+        <div class="fail-chip">RAT<small>last-resort source</small></div>
+        <div class="fail-chip">Priority valves<small>protect flight controls</small></div>
+        <div class="fail-chip">3000 psi<small>key parameter</small></div>
+        <div class="fail-chip">Cargo doors<small>yellow logic matters</small></div>
+        <div class="fail-chip">Most faults<small>sensors or pump logic</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    A320 ATA 29 quick-study page • Hydraulic pressure generation, distribution, protection, ECAM indications, and line-maintenance troubleshooting flow.
+  </footer>
+</body>
+</html>

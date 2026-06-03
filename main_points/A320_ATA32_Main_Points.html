@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 32 Landing Gear & Braking Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+      --steel: #c9d3df;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(255,159,28,0.23), transparent 30%),
+        radial-gradient(circle at 88% 18%, rgba(98,216,255,0.16), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(201,211,223,0.10), transparent 36%),
+        linear-gradient(135deg, #000, #070707 45%, #111213);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(98,216,255,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(98,216,255,.15);
+    }
+
+    .subtitle {
+      max-width: 940px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,159,28,.1), rgba(0,0,0,.74));
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 142px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(255,159,28,.22), 0 0 22px rgba(98,216,255,.12);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(255,159,28,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.1rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.15rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; font-size: .95rem; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .master-flow {
+      margin-bottom: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.10), rgba(0,0,0,.72));
+    }
+
+    .master-flow h2 {
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .flow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      flex: 1 1 155px;
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(0,0,0,.55);
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .flow-step:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(98,216,255,.16);
+    }
+
+    .flow-step strong {
+      color: var(--amber);
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .flow-step span {
+      color: #ead9b8;
+      display: block;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .three-pack {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .pack-card {
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.68);
+      border-radius: 22px;
+      padding: 18px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .pack-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 0 28px rgba(255,159,28,.20);
+    }
+
+    .pack-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+
+    .pack-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.7;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--steel), var(--orange), var(--blue), transparent);
+      opacity: .82;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(255,159,28,.25), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(98,216,255,.035));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.17), rgba(98,216,255,.09));
+      box-shadow: 0 0 26px rgba(255,159,28,.17), 0 0 20px rgba(98,216,255,.13);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(98,216,255,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.1rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.6;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    .fail-chip small {
+      display: block;
+      margin-top: 5px;
+      color: #ffc8c4;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 1000px) {
+      .section-grid, .three-pack { grid-template-columns: 1fr; }
+      .hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .fail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .hero-strip, .map-grid, .fail-list { grid-template-columns: 1fr; }
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .system-section, .memory-map, .master-flow, .pack-card { border-radius: 18px; padding: 14px; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 32 • Landing Gear & Braking</div>
+    <h1>Gear, Brakes & Steering Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for landing gear sequencing, LGCIUs, proximity sensors, green/yellow hydraulics, free-fall extension, BSCU, anti-skid, autobrake, steering, ECAM WHEEL clues, and real troubleshooting flow.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card">
+      <div class="hero-icon">🛬</div>
+      <div class="hero-title">Support</div>
+      <div class="hero-text">Landing gear supports aircraft weight and absorbs touchdown energy.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🔁</div>
+      <div class="hero-title">Move Gear</div>
+      <div class="hero-text">LGCIU logic and Green hydraulics sequence doors, locks, and actuators.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🛞</div>
+      <div class="hero-title">Brake</div>
+      <div class="hero-text">BSCU controls normal braking, anti-skid, autobrake, and backup modes.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">↔️</div>
+      <div class="hero-title">Steer</div>
+      <div class="hero-text">BSCU and hydraulic actuators control nose wheel steering with speed limits.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">📊</div>
+      <div class="hero-title">Diagnose</div>
+      <div class="hero-text">ECAM WHEEL page and CFDS LGCIU/BSCU reports are the first stops.</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="master-flow">
+      <h2>🧠 ATA 32 Master Concept</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>Logic</strong><span>LGCIU and BSCU command the system.</span></div>
+        <div class="flow-step"><strong>Hydraulics</strong><span>Green and Yellow systems provide power.</span></div>
+        <div class="flow-step"><strong>Mechanics</strong><span>Locks, actuators, shocks, wheels, and brakes move or hold.</span></div>
+        <div class="flow-step"><strong>Sensors</strong><span>Proximity and feedback sensors confirm position.</span></div>
+        <div class="flow-step"><strong>ECAM / CFDS</strong><span>Displays status and stores faults.</span></div>
+      </div>
+    </section>
+
+    <section class="three-pack">
+      <div class="pack-card">
+        <div class="pack-title">🛬 Landing Gear</div>
+        <ul>
+          <li>LGCIU controls sequencing.</li>
+          <li>Green hydraulics move gear and doors.</li>
+          <li>Proximity sensors confirm each step.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">🛞 Braking</div>
+        <ul>
+          <li>BSCU controls normal braking.</li>
+          <li>Yellow system and accumulator provide backup.</li>
+          <li>Anti-skid modulates pressure dynamically.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">↔️ Steering</div>
+        <ul>
+          <li>BSCU controls steering servo logic.</li>
+          <li>Handwheel gives large angle control.</li>
+          <li>Pedals give small steering angles.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section-grid">
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Core Concept</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">ATA 32 = motion, energy, and control</span><span class="real-world"><span class="arrow">→</span>It supports the aircraft, moves the gear, and controls landing/taxi energy.</span><span class="tag">big idea</span></div>
+          <div class="idea-card"><span class="main-idea">Computer-controlled hydraulics</span><span class="real-world"><span class="arrow">→</span>Logic commands hydraulic power, then sensors confirm mechanical movement.</span></div>
+          <div class="idea-card"><span class="main-idea">Every sequence is sensor-confirmed</span><span class="real-world"><span class="arrow">→</span>No valid sensor feedback can stop the next step from happening.</span><span class="tag">why gear sticks</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔁</div><h2>Landing Gear Sequence</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Retract sequence</span><span class="real-world"><span class="arrow">→</span>Lever UP → doors open → uplocks release → gear retracts → uplocks engage → doors close.</span></div>
+          <div class="idea-card"><span class="main-idea">Extend sequence</span><span class="real-world"><span class="arrow">→</span>Lever DOWN → doors open → gear extends → downlock engages → doors close.</span></div>
+          <div class="idea-card"><span class="main-idea">Each step must be verified</span><span class="real-world"><span class="arrow">→</span>Proximity sensors confirm position before logic allows the next action.</span><span class="tag">sequence logic</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>LGCIU — Gear Brain</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">LGCIU controls sequence</span><span class="real-world"><span class="arrow">→</span>It controls gear/door logic, monitors sensors, and sends ECAM data.</span><span class="tag">not hydraulic</span></div>
+          <div class="idea-card"><span class="main-idea">Only one LGCIU active</span><span class="real-world"><span class="arrow">→</span>The active LGCIU alternates each cycle and can switch on failure.</span></div>
+          <div class="idea-card"><span class="main-idea">Inputs and outputs</span><span class="real-world"><span class="arrow">→</span>Inputs include gear position, door position, and WOW. Outputs include selector valve commands and indications.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📡</div><h2>Proximity Sensors</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Critical feedback source</span><span class="real-world"><span class="arrow">→</span>Sensors report doors open/closed, gear up/down locked, and shock absorber/WOW state.</span></div>
+          <div class="idea-card"><span class="main-idea">Most common failure source</span><span class="real-world"><span class="arrow">→</span>False indications can block sequencing and trigger ECAM faults.</span><span class="tag">common fault</span></div>
+          <div class="idea-card"><span class="main-idea">Signal path matters</span><span class="real-world"><span class="arrow">→</span>Proximity sensor → LGCIU → logic decision → ECAM/CFDS result.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">💧</div><h2>Hydraulic Control</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Green system powers gear operation</span><span class="real-world"><span class="arrow">→</span>Hydraulic power moves the gear, doors, locks, and actuators.</span></div>
+          <div class="idea-card"><span class="main-idea">Electrical control directs hydraulic flow</span><span class="real-world"><span class="arrow">→</span>LGCIU logic commands selector valves. Hydraulics do the muscle work.</span><span class="tag">logic + power</span></div>
+          <div class="idea-card"><span class="main-idea">Safety valve protects at high speed</span><span class="real-world"><span class="arrow">→</span>The safety valve closes above high-speed limits to prevent unsafe operation.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔒</div><h2>Downlock / Uplock Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Hydraulics move it, mechanics hold it</span><span class="real-world"><span class="arrow">→</span>Gear locks are mechanical holding devices, not just hydraulic pressure.</span><span class="tag">huge</span></div>
+          <div class="idea-card"><span class="main-idea">Downlock uses overcenter geometry</span><span class="real-world"><span class="arrow">→</span>Springs and mechanical geometry help keep gear locked down.</span></div>
+          <div class="idea-card"><span class="main-idea">Uplock uses hook/latch logic</span><span class="real-world"><span class="arrow">→</span>Gear is mechanically held up after retraction.</span></div>
+          <div class="idea-card"><span class="main-idea">Locks can be released hydraulically or mechanically</span><span class="real-world"><span class="arrow">→</span>Free-fall extension mechanically releases uplocks when needed.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🪂</div><h2>Free-Fall Extension</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Emergency backup extension</span><span class="real-world"><span class="arrow">→</span>Hydraulic pressure is removed, uplocks release, and gear falls by gravity/airflow.</span><span class="tag">backup</span></div>
+          <div class="idea-card"><span class="main-idea">Cut-out valve isolates pressure</span><span class="real-world"><span class="arrow">→</span>Pressure is isolated and vent valves dump fluid to return.</span></div>
+          <div class="idea-card"><span class="main-idea">Doors stay open</span><span class="real-world"><span class="arrow">→</span>Free-fall gets the gear down, but normal door closing logic is not completed.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛢️</div><h2>Shock Absorbers</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Oleo-pneumatic struts</span><span class="real-world"><span class="arrow">→</span>Nitrogen acts as the spring and hydraulic fluid acts as the damper.</span></div>
+          <div class="idea-card"><span class="main-idea">Absorbs landing energy</span><span class="real-world"><span class="arrow">→</span>Shock struts reduce bounce and protect structure during landing and taxi.</span></div>
+          <div class="idea-card"><span class="main-idea">WOW feedback is important</span><span class="real-world"><span class="arrow">→</span>Shock absorber compression affects ground/air logic and system interlocks.</span><span class="tag">WOW logic</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛞</div><h2>Braking Modes</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Normal braking</span><span class="real-world"><span class="arrow">→</span>Green hydraulic system with BSCU control.</span></div>
+          <div class="idea-card"><span class="main-idea">Alternate with anti-skid</span><span class="real-world"><span class="arrow">→</span>Yellow system with BSCU/ABCU backup logic.</span></div>
+          <div class="idea-card"><span class="main-idea">Alternate without anti-skid</span><span class="real-world"><span class="arrow">→</span>Yellow system plus accumulator support.</span></div>
+          <div class="idea-card"><span class="main-idea">Parking/emergency braking</span><span class="real-world"><span class="arrow">→</span>Accumulator is the last-resort pressure source.</span><span class="tag">backup layers</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>BSCU — Braking Brain</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Controls braking and steering</span><span class="real-world"><span class="arrow">→</span>BSCU manages braking pressure, anti-skid, autobrake, and nose wheel steering.</span><span class="tag">brake brain</span></div>
+          <div class="idea-card"><span class="main-idea">Redundant channels</span><span class="real-world"><span class="arrow">→</span>Control and monitoring channels help prevent single-point failure.</span></div>
+          <div class="idea-card"><span class="main-idea">Digital control, hydraulic power</span><span class="real-world"><span class="arrow">→</span>Computers command the valves; hydraulic pressure does the stopping.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⚠️</div><h2>Anti-Skid</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Dynamic pressure modulation</span><span class="real-world"><span class="arrow">→</span>Anti-skid compares wheel speed against aircraft speed and releases pressure if skid starts.</span><span class="tag">very important</span></div>
+          <div class="idea-card"><span class="main-idea">Prevents skids and tire damage</span><span class="real-world"><span class="arrow">→</span>It protects tires and helps keep directional control during braking.</span></div>
+          <div class="idea-card"><span class="main-idea">Wheel-speed data matters</span><span class="real-world"><span class="arrow">→</span>Bad wheel speed inputs can create brake/anti-skid faults.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛬</div><h2>Autobrake</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Autobrake controls deceleration</span><span class="real-world"><span class="arrow">→</span>It is not just a fixed pressure setting. It targets aircraft deceleration.</span><span class="tag">decel control</span></div>
+          <div class="idea-card"><span class="main-idea">Modes include MAX, MED, and LO</span><span class="real-world"><span class="arrow">→</span>MAX is for rejected takeoff. MED/LO are landing modes.</span></div>
+          <div class="idea-card"><span class="main-idea">Ground spoiler deployment matters</span><span class="real-world"><span class="arrow">→</span>Autobrake activation logic is tied to touchdown and spoiler deployment conditions.</span></div>
+          <div class="idea-card"><span class="main-idea">Uses BSCU and ADIRU data</span><span class="real-world"><span class="arrow">→</span>Autobrake depends on aircraft speed/deceleration data and brake control logic.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🅿️</div><h2>Parking / Emergency Brake</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Yellow system or accumulator</span><span class="real-world"><span class="arrow">→</span>Parking and emergency brake pressure comes from the yellow hydraulic side or stored accumulator pressure.</span></div>
+          <div class="idea-card"><span class="main-idea">Overrides normal braking</span><span class="real-world"><span class="arrow">→</span>Parking brake logic can override other brake control paths.</span><span class="tag">emergency brake</span></div>
+          <div class="idea-card"><span class="main-idea">Accumulator gives limited applications</span><span class="real-world"><span class="arrow">→</span>Stored pressure is limited, so brake applications are not unlimited.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">↔️</div><h2>Nose Wheel Steering</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">BSCU controls steering</span><span class="real-world"><span class="arrow">→</span>Hydraulic actuators move the nose wheel based on BSCU commands.</span></div>
+          <div class="idea-card"><span class="main-idea">Handwheel = large angle</span><span class="real-world"><span class="arrow">→</span>Used for tight taxi steering and large nose wheel angles.</span></div>
+          <div class="idea-card"><span class="main-idea">Pedals = small angle</span><span class="real-world"><span class="arrow">→</span>Used for runway directional control with limited steering angle.</span></div>
+          <div class="idea-card"><span class="main-idea">Speed-dependent authority</span><span class="real-world"><span class="arrow">→</span>Steering authority reduces/disables as speed increases.</span><span class="tag">speed limit</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛡️</div><h2>Steering Protections</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Feedback sensors protect control</span><span class="real-world"><span class="arrow">→</span>Steering feedback helps prevent runaway steering and mismatch faults.</span></div>
+          <div class="idea-card"><span class="main-idea">Anti-shimmy protection</span><span class="real-world"><span class="arrow">→</span>Accumulator and damping logic help prevent wheel oscillation.</span></div>
+          <div class="idea-card"><span class="main-idea">Overpressure protection</span><span class="real-world"><span class="arrow">→</span>Valves protect components from excessive steering pressure.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📊</div><h2>ECAM WHEEL Page</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Primary diagnostic page</span><span class="real-world"><span class="arrow">→</span>Shows gear position, door status, brake status, steering, and brake temperatures.</span><span class="tag">start here</span></div>
+          <div class="idea-card"><span class="main-idea">Color logic matters</span><span class="real-world"><span class="arrow">→</span>Green is normal, red is unsafe, amber is fault/abnormal.</span></div>
+          <div class="idea-card"><span class="main-idea">Use with CFDS</span><span class="real-world"><span class="arrow">→</span>ECAM shows current state. CFDS helps identify stored LGCIU/BSCU history.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section wide">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>Common Failures & Line Reality</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Most frequent faults</span><span class="real-world"><span class="arrow">→</span>Proximity sensors, LGCIU logic faults, hydraulic leaks, valve issues, and brake temperature sensor faults.</span></div>
+          <div class="idea-card"><span class="main-idea">Mechanical failure is less common</span><span class="real-world"><span class="arrow">→</span>Many write-ups are indications, sensors, or logic problems before true structural failure.</span></div>
+          <div class="idea-card"><span class="main-idea">Golden rule</span><span class="real-world"><span class="arrow">→</span>Data first → hydraulics second → structure last.</span><span class="tag">line MX mindset</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="master-flow" style="margin-top:20px;">
+      <h2>🔧 Pro Troubleshooting Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>1. ECAM WHEEL</strong><span>Check gear, doors, brakes, steering, and temps.</span></div>
+        <div class="flow-step"><strong>2. Identify Area</strong><span>Gear, brake, steering, or indication problem.</span></div>
+        <div class="flow-step"><strong>3. CFDS</strong><span>Check LGCIU/BSCU last leg faults.</span></div>
+        <div class="flow-step"><strong>4. Sensors</strong><span>Check proximity signals and WOW logic.</span></div>
+        <div class="flow-step"><strong>5. Hydraulics</strong><span>Verify Green and Yellow pressure paths.</span></div>
+        <div class="flow-step"><strong>6. Mechanical</strong><span>Inspect locks, actuators, brakes, and structure.</span></div>
+      </div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Easy Master Model</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Landing Gear</div><ul><li>LGCIU</li><li>Sensors</li><li>Valves / actuators</li><li>Gear locks</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Braking</div><ul><li>Pedals</li><li>BSCU</li><li>Hydraulic valves</li><li>Brake pressure</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Steering</div><ul><li>Input</li><li>BSCU</li><li>Servo</li><li>Actuator / wheels</li></ul></div>
+        <div class="map-card"><div class="map-number">4</div><div class="map-title">Verification</div><ul><li>Proximity sensors</li><li>Wheel speed</li><li>ECAM WHEEL</li><li>CFDS</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Final Master Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">LGCIU<small>sequencing brain</small></div>
+        <div class="fail-chip">Prox sensors<small>critical feedback</small></div>
+        <div class="fail-chip">Step-by-step<small>logic based</small></div>
+        <div class="fail-chip">BSCU<small>braking brain</small></div>
+        <div class="fail-chip">Anti-skid<small>wheel vs aircraft speed</small></div>
+        <div class="fail-chip">Free-fall<small>gravity backup</small></div>
+        <div class="fail-chip">Steering<small>speed limited</small></div>
+        <div class="fail-chip">ECAM WHEEL<small>#1 tool</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    A320 ATA 32 quick-study page • Landing gear sequencing, braking, anti-skid, steering, ECAM WHEEL indications, and line-maintenance troubleshooting flow.
+  </footer>
+</body>
+</html>

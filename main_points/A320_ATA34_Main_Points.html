@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A320 ATA 34 Navigation Main Points</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #101010;
+      --orange: #ff9f1c;
+      --amber: #ffd27f;
+      --soft: rgba(255, 159, 28, 0.18);
+      --line: rgba(255, 159, 28, 0.55);
+      --white: #f7efe4;
+      --muted: #bda777;
+      --red: #ff5f56;
+      --blue: #62d8ff;
+      --green: #8cffb1;
+      --purple: #b58cff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(98,216,255,0.22), transparent 30%),
+        radial-gradient(circle at 88% 18%, rgba(255,159,28,0.20), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(140,255,177,0.08), transparent 36%),
+        linear-gradient(135deg, #000, #070707 45%, #061018);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,159,28,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(98,216,255,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 18px 18px;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--amber);
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 0 0 22px var(--soft);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      color: var(--orange);
+      font-size: clamp(2rem, 6vw, 4.8rem);
+      line-height: .96;
+      text-shadow: 0 0 18px rgba(255,159,28,.38), 0 0 42px rgba(98,216,255,.18);
+    }
+
+    .subtitle {
+      max-width: 940px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .hero-strip {
+      max-width: 1180px;
+      margin: 24px auto 8px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(98,216,255,.10), rgba(0,0,0,.74));
+      border-radius: 22px;
+      padding: 18px;
+      min-height: 142px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 0 34px rgba(98,216,255,.20), 0 0 24px rgba(255,159,28,.16);
+      border-color: var(--orange);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -58px;
+      bottom: -58px;
+      border: 1px solid rgba(98,216,255,.28);
+      border-radius: 50%;
+    }
+
+    .hero-icon { font-size: 2.1rem; margin-bottom: 8px; }
+    .hero-title { color: var(--amber); font-size: 1.15rem; font-weight: 900; }
+    .hero-text { color: var(--muted); margin-top: 8px; line-height: 1.42; font-size: .95rem; }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    .master-flow {
+      margin-bottom: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(98,216,255,.10), rgba(0,0,0,.72));
+    }
+
+    .master-flow h2 {
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .flow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      flex: 1 1 155px;
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(0,0,0,.55);
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .flow-step:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(98,216,255,.17);
+    }
+
+    .flow-step strong {
+      color: var(--amber);
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .flow-step span {
+      color: #ead9b8;
+      display: block;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .four-pack {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .pack-card {
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.68);
+      border-radius: 22px;
+      padding: 18px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .pack-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 0 28px rgba(255,159,28,.20);
+    }
+
+    .pack-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+
+    .pack-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.7;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .system-section {
+      border: 1px solid var(--line);
+      background: rgba(9,9,9,.88);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .system-section::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--blue), var(--green), var(--orange), transparent);
+      opacity: .82;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(circle at top, rgba(98,216,255,.26), rgba(0,0,0,.75));
+      font-size: 1.65rem;
+      box-shadow: inset 0 0 18px rgba(255,159,28,.12);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: .01em;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .idea-card {
+      border: 1px solid rgba(255,159,28,.28);
+      background: linear-gradient(135deg, rgba(255,159,28,.06), rgba(98,216,255,.035));
+      border-radius: 16px;
+      padding: 13px 14px;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idea-card:hover {
+      transform: translateX(8px) scale(1.025);
+      border-color: var(--orange);
+      background: linear-gradient(135deg, rgba(255,159,28,.17), rgba(98,216,255,.09));
+      box-shadow: 0 0 26px rgba(98,216,255,.18), 0 0 20px rgba(255,159,28,.15);
+    }
+
+    .idea-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .idea-card:hover::after { transform: translateX(120%); }
+
+    .main-idea {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 4px;
+    }
+
+    .real-world {
+      display: block;
+      color: #ead9b8;
+      line-height: 1.42;
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      color: #111;
+      background: var(--orange);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .memory-map {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(255,159,28,.1), rgba(0,0,0,.72));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-map h2 { font-size: 1.45rem; margin-bottom: 14px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid rgba(255,159,28,.38);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .map-card:hover {
+      transform: translateY(-7px) rotate(-.5deg);
+      box-shadow: 0 0 28px rgba(98,216,255,.16), 0 0 34px rgba(255,159,28,.12);
+    }
+
+    .map-number {
+      color: var(--blue);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .map-title {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 1.1rem;
+      margin: 4px 0 8px;
+    }
+
+    .map-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #ead9b8;
+      line-height: 1.6;
+    }
+
+    .fail-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fail-chip {
+      border: 1px solid rgba(255,95,86,.55);
+      background: rgba(255,95,86,.08);
+      color: #ffd6d3;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 800;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fail-chip:hover {
+      transform: scale(1.06);
+      background: rgba(255,95,86,.18);
+    }
+
+    .fail-chip small {
+      display: block;
+      margin-top: 5px;
+      color: #ffc8c4;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 18px 38px;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-strip, .four-pack { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .fail-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 1000px) {
+      .section-grid { grid-template-columns: 1fr; }
+      .map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-strip, .four-pack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .fail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .hero-strip, .four-pack, .map-grid, .fail-list { grid-template-columns: 1fr; }
+      main { padding: 18px 10px 34px; }
+      header { padding-top: 24px; }
+      .system-section, .memory-map, .master-flow, .pack-card { border-radius: 18px; padding: 14px; }
+      .idea-card:hover { transform: scale(1.015); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">✅ A320 ATA 34 • Navigation</div>
+    <h1>Navigation Data Made Line-Mechanic Simple</h1>
+    <p class="subtitle">A fast hover-card study page for ADIRS, ADR/IR logic, pitot/static and ADM data flow, MMR, ILS, GPS/FMS hybrid position, VOR/DME/ADF, radio altimeter, weather radar, TCAS, EGPWS, and sensor-first troubleshooting.</p>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-card">
+      <div class="hero-icon">📍</div>
+      <div class="hero-title">Position</div>
+      <div class="hero-text">Navigation tells the aircraft where it is and where it is going.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🧭</div>
+      <div class="hero-title">Attitude</div>
+      <div class="hero-text">ADIRS provides pitch, roll, heading, and inertial reference data.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">📡</div>
+      <div class="hero-title">Radio Nav</div>
+      <div class="hero-text">ILS, VOR, DME, ADF, GPS, and MMR feed guidance and position logic.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">⚠️</div>
+      <div class="hero-title">Awareness</div>
+      <div class="hero-text">TCAS, EGPWS, radar, and windshear systems use nav data for warnings.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-icon">🔧</div>
+      <div class="hero-title">Troubleshoot</div>
+      <div class="hero-text">Bad nav usually starts with sensor data, cross-checks, or receiver inputs.</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="master-flow">
+      <h2>🧠 ATA 34 Master Data Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>Sensors</strong><span>Pitot/static, AOA, TAT, GPS, radio receivers.</span></div>
+        <div class="flow-step"><strong>ADIRS</strong><span>ADR for air data, IR for attitude/navigation.</span></div>
+        <div class="flow-step"><strong>FMGC</strong><span>Blends GPS, IR, and radio nav into usable position.</span></div>
+        <div class="flow-step"><strong>DMC / FWC</strong><span>Display and warning computers process data.</span></div>
+        <div class="flow-step"><strong>Displays / Alerts</strong><span>PFD, ND, ECAM, TCAS, EGPWS, radar warnings.</span></div>
+      </div>
+    </section>
+
+    <section class="four-pack">
+      <div class="pack-card">
+        <div class="pack-title">🧠 Air Data / Inertial</div>
+        <ul>
+          <li>ADIRS is the core.</li>
+          <li>ADR = airspeed, altitude, temperature.</li>
+          <li>IR = attitude, heading, position.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">🛬 Landing Systems</div>
+        <ul>
+          <li>MMR combines ILS and GPS.</li>
+          <li>ILS gives localizer and glide slope.</li>
+          <li>RA supports landing and GPWS.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">📡 Radio Navigation</div>
+        <ul>
+          <li>VOR provides bearing/course.</li>
+          <li>DME provides slant range.</li>
+          <li>ADF points to NDB stations.</li>
+        </ul>
+      </div>
+      <div class="pack-card">
+        <div class="pack-title">⚠️ Awareness Systems</div>
+        <ul>
+          <li>TCAS traffic alerts.</li>
+          <li>EGPWS terrain warnings.</li>
+          <li>WXR and PWS hazard detection.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section-grid">
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧠</div><h2>Core Concept</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">ATA 34 is a navigation data engine</span><span class="real-world"><span class="arrow">→</span>It provides position, attitude, direction, and hazard awareness.</span><span class="tag">big idea</span></div>
+          <div class="idea-card"><span class="main-idea">Navigation is not just radios</span><span class="real-world"><span class="arrow">→</span>It is sensors, computers, receivers, display logic, and safety systems working together.</span></div>
+          <div class="idea-card"><span class="main-idea">Bad nav often means bad data</span><span class="real-world"><span class="arrow">→</span>A display warning may be the end of the chain, not the root problem.</span><span class="tag">sensor first</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🧩</div><h2>System Breakdown</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Four big categories</span><span class="real-world"><span class="arrow">→</span>Air data/inertial, landing systems, radio navigation, and awareness systems.</span></div>
+          <div class="idea-card"><span class="main-idea">System of systems</span><span class="real-world"><span class="arrow">→</span>ADIRS, FMGC, MMR, receivers, TCAS, EGPWS, and WXR all exchange data.</span><span class="tag">integration</span></div>
+          <div class="idea-card"><span class="main-idea">ATA 34 feeds critical systems</span><span class="real-world"><span class="arrow">→</span>Autoflight, displays, warnings, landing guidance, terrain, and traffic awareness rely on it.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📡</div><h2>ADIRS — Core System</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">ADIRS is the heart of ATA 34</span><span class="real-world"><span class="arrow">→</span>It uses ADIRUs plus pitot/static, AOA, TAT, and ADM data.</span><span class="tag">most important</span></div>
+          <div class="idea-card"><span class="main-idea">Three independent ADIRUs</span><span class="real-world"><span class="arrow">→</span>They provide redundancy and cross-checking between sources.</span></div>
+          <div class="idea-card"><span class="main-idea">Two parts inside each ADIRU</span><span class="real-world"><span class="arrow">→</span>ADR handles air data. IR handles attitude, heading, and position.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🌬️</div><h2>ADR vs IR</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">ADR = Air Data Reference</span><span class="real-world"><span class="arrow">→</span>Airspeed, altitude, temperature, and pressure-based data.</span></div>
+          <div class="idea-card"><span class="main-idea">IR = Inertial Reference</span><span class="real-world"><span class="arrow">→</span>Pitch, roll, heading, attitude, and inertial position.</span></div>
+          <div class="idea-card"><span class="main-idea">ADR and IR can fail independently</span><span class="real-world"><span class="arrow">→</span>Do not treat ADIRS as one single failure bucket.</span><span class="tag">exam + line</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔁</div><h2>ADIRS Redundancy & Switching</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Three systems cross-check each other</span><span class="real-world"><span class="arrow">→</span>Disagreement can cause CHECK ATT or CHECK HDG messages.</span></div>
+          <div class="idea-card"><span class="main-idea">Normal source logic</span><span class="real-world"><span class="arrow">→</span>Captain side normally uses ADIRU 1, F/O side normally uses ADIRU 2.</span></div>
+          <div class="idea-card"><span class="main-idea">ADIRU 3 is backup</span><span class="real-world"><span class="arrow">→</span>ATT HDG and AIR DATA switching can select alternate data sources.</span><span class="tag">source select</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>ADIRS Sensor Flow</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Pitot/static data becomes digital</span><span class="real-world"><span class="arrow">→</span>Pitot/static pressure goes to the ADM, which converts pressure into digital data.</span><span class="tag">ADM role</span></div>
+          <div class="idea-card"><span class="main-idea">Data path</span><span class="real-world"><span class="arrow">→</span>Pitot/static → ADM → ADIRU → ARINC data buses → DMC/FWC/FMGC.</span></div>
+          <div class="idea-card"><span class="main-idea">Most faults start upstream</span><span class="real-world"><span class="arrow">→</span>Probes and ADMs fail or get blocked more often than the ADIRU core.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⏱️</div><h2>ADIRS Alignment</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Must align on ground and stationary</span><span class="real-world"><span class="arrow">→</span>Movement or wrong position input can create navigation errors later.</span></div>
+          <div class="idea-card"><span class="main-idea">Alignment takes time</span><span class="real-world"><span class="arrow">→</span>The system needs time to establish accurate inertial reference.</span></div>
+          <div class="idea-card"><span class="main-idea">Bad alignment creates delayed problems</span><span class="real-world"><span class="arrow">→</span>The aircraft may appear okay at first, then show nav drift or disagreement later.</span><span class="tag">watch setup</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛬</div><h2>MMR / ILS / GPS</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">MMR combines ILS and GPS</span><span class="real-world"><span class="arrow">→</span>The Multi-Mode Receiver provides landing guidance and GPS position data.</span></div>
+          <div class="idea-card"><span class="main-idea">ILS gives precision landing guidance</span><span class="real-world"><span class="arrow">→</span>Localizer is lateral guidance. Glide slope is vertical guidance.</span><span class="tag">precision</span></div>
+          <div class="idea-card"><span class="main-idea">ILS can override other guidance</span><span class="real-world"><span class="arrow">→</span>During approach, valid ILS guidance becomes a high-priority reference.</span></div>
+          <div class="idea-card"><span class="main-idea">GPS supports FMS position</span><span class="real-world"><span class="arrow">→</span>GPS provides position, ground speed, and track data for navigation blending.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🛰️</div><h2>GPS / FMS Position Logic</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">FMS position is hybrid</span><span class="real-world"><span class="arrow">→</span>The aircraft can blend GPS, IR, and radio navigation into a computed position.</span><span class="tag">not GPS only</span></div>
+          <div class="idea-card"><span class="main-idea">GPS PRIMARY LOST does not mean lost navigation</span><span class="real-world"><span class="arrow">→</span>The aircraft can revert to IRS and radio navigation data.</span></div>
+          <div class="idea-card"><span class="main-idea">Disagreement messages matter</span><span class="real-world"><span class="arrow">→</span>FMS/GPS disagreement means the data sources do not agree enough to trust blindly.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📻</div><h2>VOR / DME / ADF</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">VOR is angular navigation</span><span class="real-world"><span class="arrow">→</span>It provides bearing and course deviation based on phase difference.</span></div>
+          <div class="idea-card"><span class="main-idea">DME measures slant range</span><span class="real-world"><span class="arrow">→</span>Distance is calculated from signal time delay.</span><span class="tag">time of flight</span></div>
+          <div class="idea-card"><span class="main-idea">ADF points to NDB</span><span class="real-world"><span class="arrow">→</span>ADF is lower priority and less accurate, but still tested and useful to understand.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">📏</div><h2>Radio Altimeter</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">RA is height above terrain</span><span class="real-world"><span class="arrow">→</span>Radio altitude is not the same as barometric altitude.</span><span class="tag">critical distinction</span></div>
+          <div class="idea-card"><span class="main-idea">Used for landing and GPWS</span><span class="real-world"><span class="arrow">→</span>RA data is critical for autoland, callouts, terrain warning, and low-altitude logic.</span></div>
+          <div class="idea-card"><span class="main-idea">Low-altitude accuracy matters</span><span class="real-world"><span class="arrow">→</span>Bad RA data can affect multiple landing and warning systems.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">🌩️</div><h2>Weather Radar & PWS</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Weather radar detects weather hazards</span><span class="real-world"><span class="arrow">→</span>It detects precipitation/weather returns and can support turbulence and terrain-related displays depending on configuration.</span></div>
+          <div class="idea-card"><span class="main-idea">Radar needs ADIRS attitude</span><span class="real-world"><span class="arrow">→</span>Attitude data stabilizes the radar beam so the display makes sense.</span><span class="tag">ADIRS link</span></div>
+          <div class="idea-card"><span class="main-idea">Predictive windshear is high priority</span><span class="real-world"><span class="arrow">→</span>PWS warns of windshear ahead during low-altitude, high-risk phases.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">✈️</div><h2>TCAS</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Traffic collision avoidance</span><span class="real-world"><span class="arrow">→</span>TCAS uses transponder data to detect and avoid nearby aircraft.</span></div>
+          <div class="idea-card"><span class="main-idea">TA and RA</span><span class="real-world"><span class="arrow">→</span>Traffic Advisory warns of traffic. Resolution Advisory commands vertical avoidance action.</span><span class="tag">safety alert</span></div>
+          <div class="idea-card"><span class="main-idea">Coordinates with other aircraft</span><span class="real-world"><span class="arrow">→</span>TCAS logic coordinates advisories so aircraft do not maneuver into each other.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section">
+        <div class="section-head"><div class="section-icon">⛰️</div><h2>EGPWS</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Terrain warning system</span><span class="real-world"><span class="arrow">→</span>EGPWS uses GPS, RA, ADIRS, and terrain logic to warn of terrain threats.</span><span class="tag">terrain safety</span></div>
+          <div class="idea-card"><span class="main-idea">Multiple warning modes</span><span class="real-world"><span class="arrow">→</span>Sink rate, terrain closure, altitude loss, config errors, and below glide slope logic.</span></div>
+          <div class="idea-card"><span class="main-idea">Predictive safety system</span><span class="real-world"><span class="arrow">→</span>EGPWS is not just reactive; it predicts terrain risk using navigation data.</span></div>
+        </div>
+      </div>
+
+      <div class="system-section wide">
+        <div class="section-head"><div class="section-icon">🔧</div><h2>Maintenance Reality</h2></div>
+        <div class="cards">
+          <div class="idea-card"><span class="main-idea">Most common faults start at sensors</span><span class="real-world"><span class="arrow">→</span>Pitot/static blockage, ADM faults, AOA sensor issues, GPS loss, antennas, and receiver faults are common.</span></div>
+          <div class="idea-card"><span class="main-idea">ADIRU core failure is less common</span><span class="real-world"><span class="arrow">→</span>Do not shotgun an ADIRU before checking sensors, ADMs, wiring, and data disagreement.</span><span class="tag">don’t shotgun</span></div>
+          <div class="idea-card"><span class="main-idea">Cross-check left vs right</span><span class="real-world"><span class="arrow">→</span>Compare captain/F/O/standby data to locate the bad source.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="master-flow" style="margin-top:20px;">
+      <h2>🔧 Pro Troubleshooting Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><strong>1. ECAM</strong><span>Check NAV faults and related messages.</span></div>
+        <div class="flow-step"><strong>2. Identify</strong><span>ADR, IR, radio nav, GPS, RA, radar, TCAS, or EGPWS.</span></div>
+        <div class="flow-step"><strong>3. Cross-Check</strong><span>Compare left, right, and standby data.</span></div>
+        <div class="flow-step"><strong>4. CFDS</strong><span>Use fault history before replacing parts.</span></div>
+        <div class="flow-step"><strong>5. Trace Source</strong><span>Sensor → ADM/receiver → ADIRU/MMR → FMGC → display.</span></div>
+      </div>
+    </section>
+
+    <section class="memory-map">
+      <h2>🧠 Master Simplification</h2>
+      <div class="map-grid">
+        <div class="map-card"><div class="map-number">1</div><div class="map-title">Navigation Core</div><ul><li>Sensors</li><li>ADIRS</li><li>FMGC</li><li>Displays</li></ul></div>
+        <div class="map-card"><div class="map-number">2</div><div class="map-title">Radio Nav</div><ul><li>Ground station</li><li>Receiver</li><li>FMGC</li><li>PFD / ND</li></ul></div>
+        <div class="map-card"><div class="map-number">3</div><div class="map-title">Safety Systems</div><ul><li>Nav data</li><li>TCAS</li><li>EGPWS</li><li>Alerts</li></ul></div>
+      </div>
+
+      <h2 style="margin-top:24px;">🔥 Final Most Important Takeaways</h2>
+      <div class="fail-list">
+        <div class="fail-chip">ADIRS<small>most critical</small></div>
+        <div class="fail-chip">ADR / IR<small>independent</small></div>
+        <div class="fail-chip">Most faults<small>sensors, not computers</small></div>
+        <div class="fail-chip">FMGC<small>hybrid position</small></div>
+        <div class="fail-chip">GPS loss<small>not nav loss</small></div>
+        <div class="fail-chip">RA<small>landing + GPWS</small></div>
+        <div class="fail-chip">TCAS / EGPWS<small>ATA 34-fed</small></div>
+        <div class="fail-chip">Radar<small>needs ADIRS</small></div>
+        <div class="fail-chip">Golden rule<small>sensor first</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    A320 ATA 34 quick-study page • ADIRS, MMR, GPS, radio navigation, radio altimeter, radar, TCAS, EGPWS, and line-maintenance sensor-first troubleshooting.
+  </footer>
+</body>
+</html>
